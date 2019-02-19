@@ -18,3 +18,6 @@ mx build
 mx image
 
 ## nqqrlvr dkarnikis
+
+### Searching in folders
+grep -nra sinaritis_pou_psaxnw_i_kati_allo -I .
