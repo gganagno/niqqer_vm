@@ -27,4 +27,6 @@ mx build
 mx image
 
 javac tests/thread.java
-maxvm tests/thread !!!!
+
+### Searching in folders
+grep -nra sinaritis_pou_psaxnw_i_kati_allo -I .
