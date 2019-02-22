@@ -72,3 +72,16 @@ alla me alvaniko tropo douleuei
 https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaNativeInterface.html
 
 https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html
+
+
+### javax.crypto
+
+https://docs.oracle.com/javase/7/docs/api/javax/crypto/package-summary.html
+
+apo edw fadazomai prpei na kanoume:
+
+	- Cipher
+	- CipherSpi (Service Provider Interface) (?)
+	- KeyGenerator
+	- KeyGeneratorSpi
+	- SealedObject
