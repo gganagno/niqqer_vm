@@ -64,3 +64,11 @@ alla h malakia den pianei ama kanw
 source /home/el/Desktop/446/env.sh kateu8eian den kserw giati\
 
 alla me alvaniko tropo douleuei
+
+
+
+### JNI 
+
+https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaNativeInterface.html
+
+https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html
