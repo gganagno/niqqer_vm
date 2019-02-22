@@ -12,7 +12,7 @@ print_data(unsigned int got){
 }
 
 void
-ocall_print(uint8_t* value){
+ocall_print(char * value){
     int i;
     for(i = 0; i < 32; i++){
 	printf("%2.2x", value[i]);

@@ -1,4 +1,17 @@
 javac HelloJNI.java
+
 javah HelloJNI
-gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -o libhello.so -shared HelloJNI.c -fPIC // panta me to prefix lib
-$ java -Djava.library.path=. HelloJNI
+
+gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -o libhello.so -shared HelloJNI.c -fPIC
+
+// panta me to prefix lib
+
+// java -Djava.library.path=. HelloJNI
+
+cp libhello.so maxine/com.oracle.max.vm.native/generated/linux/
+
+mx build
+
+mx image
+
+

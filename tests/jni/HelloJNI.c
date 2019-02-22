@@ -4,7 +4,7 @@
 #include "HelloJNI.h"   // Generated
  
 // Implementation of the native method sayHello()
-JNIEXPORT void JNICALL Java_HelloJNI_sayHello(JNIEnv *env, jobject thisObj) {
-   printf("Hello World!\n");
+JNIEXPORT void JNICALL Java_com_sun_max_vm_jdk_jni_sayHello(JNIEnv *env, jobject thisObj) {
+   printf("Hello World myniqqerinoz!\n");
    return;
 }
