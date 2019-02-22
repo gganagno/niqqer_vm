@@ -19,7 +19,7 @@ mx image
 
 
 
-## Function Hooking
+## Function Hooking 
 put JDK/JDK_java_util_Random.java into /maxine/com.sun.max/src/com/sun/max/vm/jdk
 
 ousiastika hookarw edw apo tin Random class to nextInt().
@@ -27,6 +27,8 @@ ousiastika hookarw edw apo tin Random class to nextInt().
 mx build
 
 mx image
+
+source = https://maxine-vm.readthedocs.io/en/latest/JDK-Interoperation.html#method-substitution
 
 javac tests/thread.java
 
