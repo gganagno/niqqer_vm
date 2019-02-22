@@ -1,0 +1,32 @@
+#ifndef ENCLAVE_T_H__
+#define ENCLAVE_T_H__
+
+#include <stdint.h>
+#include <wchar.h>
+#include <stddef.h>
+#include "sgx_edger8r.h" /* for sgx_ocall etc. */
+
+
+#include <stdlib.h> /* for size_t */
+
+#define SGX_CAST(type, item) ((type)(item))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+void print_secret();
+void set_secret(unsigned int a);
+void addition(unsigned int a, unsigned int b);
+unsigned int get_secret();
+void calc_checksum();
+
+sgx_status_t SGX_CDECL print_data(unsigned int got);
+sgx_status_t SGX_CDECL ocall_print(uint8_t* value);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif

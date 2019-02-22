@@ -34,3 +34,9 @@ javac tests/thread.java
 
 ### Searching in folders
 grep -nra sinaritis_pou_psaxnw_i_kati_allo -I .
+
+#### Intel SGX
+
+https://github.com/intel/linux-sgx base
+
+https://github.com/intel/linux-sgx-driver 

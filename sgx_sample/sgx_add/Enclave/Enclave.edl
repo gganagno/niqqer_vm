@@ -1,0 +1,16 @@
+enclave {
+
+    trusted {
+        /* define ECALLs here. */
+	public void print_secret();
+	public void set_secret(unsigned int a);
+	public void addition(unsigned int a, unsigned int b);
+	public unsigned int get_secret();
+    };
+
+    untrusted {
+        /* define OCALLs here. */
+		void print_data(unsigned int got);
+		void ocall_print([out, in, string]uint8_t* value);
+    };
+};
