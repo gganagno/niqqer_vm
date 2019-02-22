@@ -46,5 +46,21 @@ sgx installed ok hardware mode ok
 ### SSH
 
 $  ssh -p 65420 -i karnikis el@62.1.232.170
-
+(sto discord/channel446 exw anevasei ta kleidia sou)
 exei bugs akoma alla ok
+
+
+### bashrc 
+
+ekana auth tn alvania sto bashrch
+
+cd /home/el/Desktop/446/
+source env.sh
+source sgx_env.sh
+cd ../../
+
+gia na mhn trexoume ta envs kathe fora
+alla h malakia den pianei ama kanw 
+source /home/el/Desktop/446/env.sh kateu8eian den kserw giati\
+
+alla me alvaniko tropo douleuei
