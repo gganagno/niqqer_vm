@@ -40,3 +40,11 @@ grep -nra sinaritis_pou_psaxnw_i_kati_allo -I .
 https://github.com/intel/linux-sgx base
 
 https://github.com/intel/linux-sgx-driver 
+
+sgx installed ok hardware mode ok
+
+### SSH
+
+$  ssh -p 65420 -i karnikis el@62.1.232.170
+
+exei bugs akoma alla ok
