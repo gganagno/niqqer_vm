@@ -29,30 +29,26 @@
 #
 #
 
-######## SGX SDK Settings ########
+######## SGX SDK Settings  	########
 
 SGX_SDK ?= /opt/intel/sgxsdk
+SGX_MODE ?= HW
 SGX_ARCH ?= x64
-
-SGX_MODE?=HW
-SGX_PRERELEASE?=1
-#SGX_DEBUG ?=1
+SGX_DEBUG ?= 1
 ifeq ($(shell getconf LONG_BIT), 32)
 	SGX_ARCH := x86
 else ifeq ($(findstring -m32, $(CXXFLAGS)), -m32)
 	SGX_ARCH := x86
 endif
-
 ifeq ($(SGX_ARCH), x86)
-	SGX_COMMON_CFLAGS := -m32 -pie -fPIE
+	SGX_COMMON_FLAGS := -m32
 	SGX_LIBRARY_PATH := $(SGX_SDK)/lib
 	SGX_ENCLAVE_SIGNER := $(SGX_SDK)/bin/x86/sgx_sign
 	SGX_EDGER8R := $(SGX_SDK)/bin/x86/sgx_edger8r
 else
-	SGX_COMMON_CFLAGS := -m64 -pie -fPIE
+	SGX_COMMON_FLAGS := -m64
 	SGX_LIBRARY_PATH := $(SGX_SDK)/lib64
-	SGX_ENCLAVE_SIGNER := $(SGX_SDK)/bin/x86/sgx_sign
-
+	SGX_ENCLAVE_SIGNER := $(SGX_SDK)/bin/x64/sgx_sign
 	SGX_EDGER8R := $(SGX_SDK)/bin/x64/sgx_edger8r
 endif
 
@@ -121,9 +117,9 @@ Enclave_Cpp_Files := Enclave/Enclave.cpp  $(wildcard Enclave/Edger8rSyntax/*.cpp
 Enclave_Include_Paths := -IInclude -IEnclave -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/stlport
 Enclave_C_Flags := $(SGX_COMMON_CFLAGS) -nostdinc -fvisibility=hidden -fpie -fstack-protector $(Enclave_Include_Paths)
 Enclave_Cpp_Flags := $(Enclave_C_Flags) -std=c++03 -nostdinc++ -pie -fPIE -D_GLIBCXX_USE_CXX11_ABI=0
-Enclave_Link_Flags := $(SGX_COMMON_CFLAGS) -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_LIBRARY_PATH) \
+Enclave_Link_Flags := $(SGX_COMMO N_CFLAGS) -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_LIBRARY_PATH) \
 	-Wl,--whole-archive -l$(Trts_Library_Name) -Wl,--no-whole-archive \
-	-Wl,--start-group -lsgx_tstdc -lsgx_tstdcxx -l$(Crypto_Library_Name) -l$(Service_Library_Name) -Wl,--end-group \
+	-Wl,--start-group -lsgx_tstdc -lsgx_tcxx -l$(Crypto_Library_Name) -l$(Service_Library_Name) -Wl,--end-group \
 	-Wl,-Bstatic -Wl,-Bsymbolic -Wl,--no-undefined \
 	-Wl,-pie,-eenclave_entry -Wl,--export-dynamic  \
 	-Wl,--defsym,__ImageBase=0 \
