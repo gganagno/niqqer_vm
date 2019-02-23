@@ -11,16 +11,19 @@ final class JDK_javax_crypto_KeyGenerator {
    
     @SUBSTITUTE
     public SecretKey generateKey() {
+
     	System.loadLibrary("hello");
-    	jni  n = new jni();
-    	n.sayHello();
+
+    	jni_helper n = new jni_helper();
+    	n.SGX_KeyGenerator();
+    	
         return null;
     }
 }
 
 
-class jni {
+class jni_helper {
     
-  	public native void sayHello();
+  	public native void SGX_KeyGenerator();
 
 }
