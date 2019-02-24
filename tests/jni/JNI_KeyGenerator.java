@@ -1,9 +1,5 @@
 public class JNI_KeyGenerator {
 
-   // static {
-   //  System.loadLibrary("hello"); 
-   // }
-	//auto edw den xreiazetai
  
    private native void SGX_KeyGenerator();
 

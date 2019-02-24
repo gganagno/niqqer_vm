@@ -10,6 +10,7 @@ enclave {
 
     untrusted {
         /* define OCALLs here. */
+        unsigned int wrapper_init_enclave();
         void wrapper_print_key(sgx_enclave_id_t eid);
 		void wrapper_set_key(sgx_enclave_id_t eid,unsigned int a);
 		void wrapper_keygen(sgx_enclave_id_t eid);

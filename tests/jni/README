@@ -1,17 +1,13 @@
-javac HelloJNI.java
 
-javah HelloJNI
+javac JNI_KeyGenerator.java
 
-gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -o libhello.so -shared HelloJNI.c -fPIC
+javah JNI_KeyGenerator
 
-// panta me to prefix lib
+gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux JNI_KeyGenerator.c -L /home/el/Desktop/446/maxine/com.oracle.max.vm.native/generated/linux/ -lsgx_keygen -shared -fPIC -o libhello.so -lenclave.signed
 
-// java -Djava.library.path=. HelloJNI
+cp libhello.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
 
-cp libhello.so maxine/com.oracle.max.vm.native/generated/linux/
 
 mx build
 
 mx image
-
-

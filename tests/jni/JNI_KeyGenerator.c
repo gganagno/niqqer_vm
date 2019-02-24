@@ -7,23 +7,30 @@
 #include <unistd.h>
 #include <stdio.h>
 
-// #include "sgx_urts.h"
-// #include "Enclave_u.h"
-// #include "sgx_tcrypto.h"
 
 
-extern void wrapper_keygen(unsigned int eid);
-extern void wrapper_print_key(unsigned int id);
-extern unsigned int init_enclave();
+extern unsigned int wrapper_init_enclave();
 
-// Implementation of the native method KeyGenerator()
-JNIEXPORT void JNICALL Java_com_sun_max_vm_jdk_jni_1helper_SGX_1KeyGenerator(JNIEnv *env, jobject thisObj) {
+extern unsigned int wrapper_keygen();
 
-   unsigned int id = init_enclave();
-   wrapper_keygen(id);
-   wrapper_print_key(id);
-   printf("Hello World myniqqerinoz!\n");
-   return;
+extern unsigned int wrapper_print_key();
+
+extern unsigned int wrapper_get_key();
+
+
+JNIEXPORT int JNICALL Java_com_sun_max_vm_jdk_jni_1helper_SGX_1KeyGenerator(JNIEnv *env, jobject thisObj) {
+
+	printf("entry myniqqerinoz!\n");
+	unsigned int id = wrapper_init_enclave();
+
+	wrapper_keygen(id);
+	unsigned int key;
+	wrapper_get_key(id,key);
+
+	key = 66657;
+	wrapper_print_key(id);
+	printf("Hello World myniqqerinoz!\n");
+	return key;
 
 }
 

@@ -96,8 +96,8 @@ Enclave_Link_Flags := $(SGX_COMMO N_CFLAGS) -Wl,--no-undefined -nostdlib -nodefa
 
 Enclave_Cpp_Objects := $(Enclave_Cpp_Files:.cpp=.o)
 
-Enclave_Name := enclave.so
-Signed_Enclave_Name := enclave.signed.so
+Enclave_Name := libenclave.so
+Signed_Enclave_Name := libenclave.signed.so
 Enclave_Config_File := Enclave/Enclave.config.xml
 
 ifeq ($(SGX_MODE), HW)
@@ -112,7 +112,7 @@ endif
 .PHONY: all run
 
 ifeq ($(Build_Mode), HW_RELEASE)
-all: $(App_Name) $(Enclave_Name) $(App_so)
+all: $(App_Name) $(Enclave_Name) 
 	@echo "The project has been built in release hardware mode."
 	@echo "Please sign the $(Enclave_Name) first with your signing key before you run the $(App_Name) to launch and access the enclave."
 	@echo "To sign the enclave use the command:"
@@ -120,7 +120,7 @@ all: $(App_Name) $(Enclave_Name) $(App_so)
 	@echo "You can also sign the enclave using an external signing tool. See User's Guide for more details."
 	@echo "To build the project in simulation mode set SGX_MODE=SIM. To build the project in prerelease mode set SGX_PRERELEASE=1 and SGX_MODE=HW."
 else
-all: $(App_Name) $(Signed_Enclave_Name) $(App_so)
+all: $(App_Name) $(Signed_Enclave_Name) 
 endif
 
 run: all
@@ -144,14 +144,11 @@ App/%.o: App/%.cpp
 	@echo "CXX <=  $<"
 
 $(App_Name): App/Enclave_u.o $(App_Cpp_Objects)
-	@$(CXX) $^ -o $@ $(App_Link_Flags) 
+	@$(CXX) $^ -o libsgx_keygen.so  $(App_Link_Flags)  -shared -fPIC
 	@echo "LINK =>  $(App_Link_Flags)"
 
-################
-$(App_so): App/Enclave_u.o $(App_Cpp_Objects)
-	@$(CXX) $^ -shared -fPIC -o $@ $(App_Link_Flags) 
-	@echo "LINK =>  $(App_Link_Flags)"
-################
+
+
 
 
 ######## Enclave Objects ########
@@ -179,4 +176,4 @@ $(Signed_Enclave_Name): $(Enclave_Name)
 .PHONY: clean
 
 clean:
-	@rm -f $(App_Name) $(Enclave_Name) $(Signed_Enclave_Name) $(App_Cpp_Objects) App/Enclave_u.* $(Enclave_Cpp_Objects) Enclave/Enclave_t.*
+	@rm -f $(App_Name) $(Enclave_Name) $(Signed_Enclave_Name) $(App_Cpp_Objects) App/Enclave_u.* $(Enclave_Cpp_Objects) Enclave/Enclave_t.* libsgx_keygen.so

@@ -15,7 +15,8 @@ final class JDK_javax_crypto_KeyGenerator {
     	System.loadLibrary("hello");
 
     	jni_helper n = new jni_helper();
-    	n.SGX_KeyGenerator();
+    	
+    	System.out.println("java: key is: " + n.SGX_KeyGenerator());
     	
         return null;
     }
@@ -24,6 +25,6 @@ final class JDK_javax_crypto_KeyGenerator {
 
 class jni_helper {
     
-  	public native void SGX_KeyGenerator();
+  	public native int SGX_KeyGenerator();
 
 }

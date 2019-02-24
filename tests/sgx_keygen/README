@@ -1,19 +1,13 @@
-den kserw ama prpei na to kanoume me auth th logikh kai kala sto 
-app einai 
 
-wrapper_get_key(){
-	get_key();
-}
-pou h get_key einai sto enclave
+To app einai vivliothiki
 
-sto makefile exw valei na kanei kai to .so mazi me to kanoniko
+Allagh sto makefile me 
 
-kai meta pali prpei na kanoume 
+@$(CXX) $^ -o libsgx_keygen.so  $(App_Link_Flags)  -shared -fPIC
 
-cp *.so maxine/com.oracle.max.vm.native/generated/linux/
+otan paei na ftiaksei to app_name
 
-pernaei ta comp alla vgazei
+make
 
-maxvm: symbol lookup error: /home/el/Desktop/446/maxine/com.oracle.max.vm.native/generated/linux/libhello.so: undefined symbol: init_enclave
+cp *.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
 
-giati apo to libhello.so (JNI_KeyGenerator.c) kanw tn init_enclave ktl 
