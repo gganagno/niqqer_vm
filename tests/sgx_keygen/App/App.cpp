@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include "sgx_urts.h"
 #include "Enclave_u.h"
@@ -12,6 +13,7 @@ extern "C" {
 
 void
 print_data(unsigned int got){
+
 	printf("The key is: %u\n", got);
 }
 
@@ -33,10 +35,17 @@ unsigned int wrapper_init_enclave(){
 	sgx_launch_token_t token = {0};
 	int updated = 0;
 
+	char buffer[1024];
+
 	/* create the enclave */
 	printf("Creating Enclave\n");
 
-	ret = sgx_create_enclave("libenclave.signed.so", SGX_DEBUG_FLAG, &token,
+	const char* s = getenv("LD_LIBRARY_PATH");
+
+	memset(buffer, 0 ,1024);
+	sprintf(buffer, "%slibenclave.signed.so", s);
+
+	ret = sgx_create_enclave(buffer, SGX_DEBUG_FLAG, &token,
 	    &updated, &eid, NULL);
 
 	if (ret != SGX_SUCCESS){
@@ -62,9 +71,7 @@ void wrapper_set_key(sgx_enclave_id_t eid,unsigned int a){
 
 
 void wrapper_keygen(sgx_enclave_id_t eid){
-	printf("calling keygen\n");
 	keygen(eid);
-	printf("returning from keygen\n");
 }
 
 

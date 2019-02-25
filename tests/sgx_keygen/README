@@ -11,3 +11,6 @@ make
 
 cp *.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
 
+allagh sto create_enclave gia to path
+
+

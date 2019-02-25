@@ -12,7 +12,7 @@ final class JDK_javax_crypto_KeyGenerator {
     @SUBSTITUTE
     public SecretKey generateKey() {
 
-    	System.loadLibrary("hello");
+        System.loadLibrary("hello");
 
     	jni_helper n = new jni_helper();
     	
