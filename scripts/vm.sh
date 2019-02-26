@@ -7,12 +7,11 @@ make
 cp *.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
 cd ../jni/
 make clean
-javac JNI_KeyGenerator.java
+javac JNI_*.java
+javah JNI_Cipher
 javah JNI_KeyGenerator
-gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux JNI_KeyGenerator.c -L $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/ -lsgx_keygen -shared -fPIC -o libhello.so -lenclave.signed
+gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux JNI_*.c -L $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/ -lsgx_keygen -shared -fPIC -o libhello.so -lenclave.signed
 cp libhello.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
 cd $MAXINE_HOME
 mx build
 mx image
-
-
