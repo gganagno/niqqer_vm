@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-
+#include <stdlib.h>
 
 extern unsigned int wrapper_init_enclave();
 
@@ -18,21 +18,30 @@ extern unsigned int wrapper_print_key();
 extern unsigned int wrapper_get_key();
 
 
-JNIEXPORT int JNICALL Java_com_sun_max_vm_jdk_jni_1helper_SGX_1KeyGenerator(JNIEnv *env, jobject thisObj) {
+JNIEXPORT void JNICALL Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1init(JNIEnv *env, jobject thisObj) {
 
-	printf("Entry Java_com_sun_max_vm_jdk_jni_1helper_SGX_1KeyGenerator!\n");
+	printf("Entry Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1init!\n");
+
+
+}
+
+
+JNIEXPORT char * JNICALL Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1generateKey(JNIEnv *env, jobject thisObj) {
+
+	printf("Entry Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1generateKey!\n");
 
 	unsigned int id = wrapper_init_enclave();
 
 	wrapper_keygen(id);
 
-	unsigned int key;
+	char *buff = (char *)malloc(1024);
 
-	key = 66657;
+	buff = "abcdefghijklmopqrstuvwxyz";
 
-	printf("c: key is %d\n",key );
+	printf("c: key is %s\n",buff );
+
 	wrapper_print_key(id);
-	return key;
+
+	return buff;
 
 }
-

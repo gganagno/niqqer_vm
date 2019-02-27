@@ -18,6 +18,5 @@ public class ciph {
         ciph.update(new byte[5]);
 
         ciph.doFinal();
-        System.out.println("peos");
     } 
 } 

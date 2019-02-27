@@ -78,10 +78,15 @@ https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html
 
 https://docs.oracle.com/javase/7/docs/api/javax/crypto/package-summary.html
 
-apo edw fadazomai prpei na kanoume:
+apo edw boroume na kanoume:
 
 	- Cipher
-	- CipherSpi (Service Provider Interface) (?)
 	- KeyGenerator
-	- KeyGeneratorSpi
 	- SealedObject
+
+### java.security
+
+https://docs.oracle.com/javase/7/docs/api/java/security/package-summary.html
+
+	-SecureRandom
+	-SignedObject

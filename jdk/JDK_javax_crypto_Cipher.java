@@ -10,7 +10,6 @@ import com.sun.max.annotate.*;
 import com.sun.max.vm.jni.*;
 
 @METHOD_SUBSTITUTIONS(javax.crypto.Cipher.class)
-
 final class JDK_javax_crypto_Cipher {
    
     @SUBSTITUTE
@@ -19,9 +18,7 @@ final class JDK_javax_crypto_Cipher {
         System.loadLibrary("hello");
 
     	jni_cipher_helper n = new jni_cipher_helper();
-    	
-    	System.out.println("java: key is: " + n.SGX_Cipher_init());
-        // return null;
+    	System.out.println("java: Cipher_init: " + n.SGX_Cipher_init());
     }
 
     @SUBSTITUTE
@@ -30,7 +27,7 @@ final class JDK_javax_crypto_Cipher {
         System.loadLibrary("hello");
 
         jni_cipher_helper n = new jni_cipher_helper();        
-        System.out.println("java: key is: " + n.SGX_Cipher_update());
+        System.out.println("java: Cipher_update: " + n.SGX_Cipher_update());
         
         return new byte[5];
     }
@@ -41,7 +38,7 @@ final class JDK_javax_crypto_Cipher {
         System.loadLibrary("hello");
 
         jni_cipher_helper n = new jni_cipher_helper();        
-        System.out.println("java: key is: " + n.SGX_Cipher_dofinal());
+        System.out.println("java: Cipher_dofinal: " + n.SGX_Cipher_dofinal());
         
         return new byte[10];
     }
