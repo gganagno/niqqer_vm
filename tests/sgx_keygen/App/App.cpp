@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <limits.h>
-
+#include <stdlib.h>
 #include "sgx_urts.h"
 #include "Enclave_u.h"
 #include "sgx_tcrypto.h"
@@ -12,9 +12,9 @@
 extern "C" {
 
 void
-print_data(unsigned int got){
+print_data(char * got){
 
-	printf("The key is: %u\n", got);
+	printf("The key is: %s\n", got);
 }
 
 
@@ -30,6 +30,7 @@ ocall_print(char * value){
 unsigned int wrapper_init_enclave(){
 
 	sgx_enclave_id_t eid = 0 ;
+
 	sgx_status_t ret = SGX_SUCCESS;
 
 	sgx_launch_token_t token = {0};
@@ -40,10 +41,11 @@ unsigned int wrapper_init_enclave(){
 	/* create the enclave */
 	printf("Creating Enclave\n");
 
-	const char* s = getenv("LD_LIBRARY_PATH");
+	const char* s = getenv("MAXINE_HOME");
 
 	memset(buffer, 0 ,1024);
-	sprintf(buffer, "%slibenclave.signed.so", s);
+
+	sprintf(buffer, "%s/com.oracle.max.vm.native/generated/linux/libenclave.signed.so", s);
 
 	ret = sgx_create_enclave(buffer, SGX_DEBUG_FLAG, &token,
 	    &updated, &eid, NULL);
@@ -60,24 +62,21 @@ void wrapper_print_key(sgx_enclave_id_t eid){
 }
 
 
-unsigned int wrapper_get_key(sgx_enclave_id_t eid,unsigned int key){
-	return get_key(eid,&key);
+void wrapper_get_key(sgx_enclave_id_t eid, char * key){
+	get_key(eid,key);
+	sprintf(key,"wzpmykneegrows");
 }
 
 
-void wrapper_set_key(sgx_enclave_id_t eid,unsigned int a){
-	set_key(eid,a);
-}
+// void wrapper_set_key(sgx_enclave_id_t eid,unsigned int a){
+// 	set_key(eid,a);
+// }
 
 
 void wrapper_keygen(sgx_enclave_id_t eid){
 	keygen(eid);
 }
 
-
-
-// int
-// main(int argc, char *argv[]){}
      
 }
 

@@ -3,20 +3,18 @@ enclave {
     trusted {
         /* define ECALLs here. */
 	public void print_key();
-	public void set_key(unsigned int a);
 	public void keygen();
-	public unsigned int get_key();
+	public void get_key([out, in, string]char * got);
     };
 
     untrusted {
         /* define OCALLs here. */
         unsigned int wrapper_init_enclave();
         void wrapper_print_key(sgx_enclave_id_t eid);
-		void wrapper_set_key(sgx_enclave_id_t eid,unsigned int a);
 		void wrapper_keygen(sgx_enclave_id_t eid);
-		unsigned int wrapper_get_key(sgx_enclave_id_t eid,unsigned int key);
+		void wrapper_get_key(sgx_enclave_id_t eid,[out, in, string]char * got);
 		
-		void print_data(unsigned int got);
+		void print_data([out, in, string]char * got);
 		void ocall_print([out, in, string]char* value);
     };
 };
