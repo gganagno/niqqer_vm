@@ -1,0 +1,144 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADD_ASSIGN_OVERFLOW	Enclave/Enclave_t.c	25;"	d	file:
+App_C_Flags	Makefile	/^App_C_Flags := $(SGX_COMMON_CFLAGS) -pie -fPIE -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 -Wno-attributes $(App_Include_Paths)$/;"	m
+App_Cpp_Files	Makefile	/^App_Cpp_Files := $(wildcard App\/*.cpp)$/;"	m
+App_Cpp_Flags	Makefile	/^App_Cpp_Flags := $(App_C_Flags) -std=c++11 -pie -fPIE -D_GLIBCXX_USE_CXX11_ABI=0$/;"	m
+App_Cpp_Objects	Makefile	/^App_Cpp_Objects := $(App_Cpp_Files:.cpp=.o)$/;"	m
+App_Include_Paths	Makefile	/^App_Include_Paths := -IApp -I$(SGX_SDK)\/include$/;"	m
+App_Link_Flags	Makefile	/^App_Link_Flags := $(SGX_COMMON_CFLAGS) -L$(SGX_LIBRARY_PATH) -l$(Urts_Library_Name) -pie -fPIE -D_GLIBCXX_USE_CXX11_ABI=0$/;"	m
+App_Name	Makefile	/^App_Name := sgx_keygen$/;"	m
+App_so	Makefile	/^App_so := libsgx_keygen.so$/;"	m
+Build_Mode	Makefile	/^Build_Mode = HW_RELEASE$/;"	m
+CHECK_ENCLAVE_POINTER	Enclave/Enclave_t.c	20;"	d	file:
+CHECK_REF_POINTER	Enclave/Enclave_t.c	10;"	d	file:
+CHECK_UNIQUE_POINTER	Enclave/Enclave_t.c	15;"	d	file:
+Crypto_Library_Name	Makefile	/^Crypto_Library_Name := sgx_tcrypto$/;"	m
+ENCLAVE_FILE	App/App.cpp	9;"	d	file:
+ENCLAVE_T_H__	Enclave/Enclave_t.h	2;"	d
+ENCLAVE_U_H__	App/Enclave_u.h	2;"	d
+Enclave_C_Flags	Makefile	/^Enclave_C_Flags := $(SGX_COMMON_CFLAGS) -nostdinc -fvisibility=hidden -fpie -fstack-protector $(Enclave_Include_Paths)$/;"	m
+Enclave_Config_File	Makefile	/^Enclave_Config_File := Enclave\/Enclave.config.xml$/;"	m
+Enclave_Cpp_Files	Makefile	/^Enclave_Cpp_Files := Enclave\/Enclave.cpp  $(wildcard Enclave\/Edger8rSyntax\/*.cpp) $(wildcard Enclave\/TrustedLibrary\/*.cpp)$/;"	m
+Enclave_Cpp_Flags	Makefile	/^Enclave_Cpp_Flags := $(Enclave_C_Flags) -std=c++03 -nostdinc++ -pie -fPIE -D_GLIBCXX_USE_CXX11_ABI=0$/;"	m
+Enclave_Cpp_Objects	Makefile	/^Enclave_Cpp_Objects := $(Enclave_Cpp_Files:.cpp=.o)$/;"	m
+Enclave_Include_Paths	Makefile	/^Enclave_Include_Paths := -IInclude -IEnclave -I$(SGX_SDK)\/include -I$(SGX_SDK)\/include\/tlibc -I$(SGX_SDK)\/include\/stlport$/;"	m
+Enclave_Link_Flags	Makefile	/^Enclave_Link_Flags := $(SGX_COMMO N_CFLAGS) -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_LIBRARY_PATH) \\$/;"	m
+Enclave_Name	Makefile	/^Enclave_Name := libenclave.so$/;"	m
+Enclave_ocall_print	App/Enclave_u.c	/^static sgx_status_t SGX_CDECL Enclave_ocall_print(void* pms)$/;"	f	file:
+Enclave_print_data	App/Enclave_u.c	/^static sgx_status_t SGX_CDECL Enclave_print_data(void* pms)$/;"	f	file:
+Enclave_wrapper_get_key	App/Enclave_u.c	/^static sgx_status_t SGX_CDECL Enclave_wrapper_get_key(void* pms)$/;"	f	file:
+Enclave_wrapper_init_enclave	App/Enclave_u.c	/^static sgx_status_t SGX_CDECL Enclave_wrapper_init_enclave(void* pms)$/;"	f	file:
+Enclave_wrapper_keygen	App/Enclave_u.c	/^static sgx_status_t SGX_CDECL Enclave_wrapper_keygen(void* pms)$/;"	f	file:
+Enclave_wrapper_print_key	App/Enclave_u.c	/^static sgx_status_t SGX_CDECL Enclave_wrapper_print_key(void* pms)$/;"	f	file:
+OCALL_PRINT_DEFINED__	App/Enclave_u.h	40;"	d
+PRINT_DATA_DEFINED__	App/Enclave_u.h	36;"	d
+SGX_ARCH	Makefile	/^	SGX_ARCH := x86$/;"	m
+SGX_ARCH	Makefile	/^SGX_ARCH ?= x64$/;"	m
+SGX_CAST	App/Enclave_u.h	13;"	d
+SGX_CAST	Enclave/Enclave_t.h	12;"	d
+SGX_COMMON_FLAGS	Makefile	/^	SGX_COMMON_FLAGS := -m32$/;"	m
+SGX_COMMON_FLAGS	Makefile	/^	SGX_COMMON_FLAGS := -m64$/;"	m
+SGX_DEBUG	Makefile	/^SGX_DEBUG ?= 1$/;"	m
+SGX_EDGER8R	Makefile	/^	SGX_EDGER8R := $(SGX_SDK)\/bin\/x64\/sgx_edger8r$/;"	m
+SGX_EDGER8R	Makefile	/^	SGX_EDGER8R := $(SGX_SDK)\/bin\/x86\/sgx_edger8r$/;"	m
+SGX_ENCLAVE_SIGNER	Makefile	/^	SGX_ENCLAVE_SIGNER := $(SGX_SDK)\/bin\/x64\/sgx_sign$/;"	m
+SGX_ENCLAVE_SIGNER	Makefile	/^	SGX_ENCLAVE_SIGNER := $(SGX_SDK)\/bin\/x86\/sgx_sign$/;"	m
+SGX_LIBRARY_PATH	Makefile	/^	SGX_LIBRARY_PATH := $(SGX_SDK)\/lib$/;"	m
+SGX_LIBRARY_PATH	Makefile	/^	SGX_LIBRARY_PATH := $(SGX_SDK)\/lib64$/;"	m
+SGX_MODE	Makefile	/^SGX_MODE ?= SIM$/;"	m
+SGX_SDK	Makefile	/^SGX_SDK ?= \/opt\/intel\/sgxsdk$/;"	m
+Service_Library_Name	Makefile	/^	Service_Library_Name := sgx_tservice$/;"	m
+Service_Library_Name	Makefile	/^	Service_Library_Name := sgx_tservice_sim$/;"	m
+Signed_Enclave_Name	Makefile	/^Signed_Enclave_Name := libenclave.signed.so$/;"	m
+Trts_Library_Name	Makefile	/^	Trts_Library_Name := sgx_trts$/;"	m
+Trts_Library_Name	Makefile	/^	Trts_Library_Name := sgx_trts_sim$/;"	m
+Urts_Library_Name	Makefile	/^	Urts_Library_Name := sgx_urts$/;"	m
+Urts_Library_Name	Makefile	/^	Urts_Library_Name := sgx_urts_sim$/;"	m
+WRAPPER_GET_KEY_DEFINED__	App/Enclave_u.h	32;"	d
+WRAPPER_INIT_ENCLAVE_DEFINED__	App/Enclave_u.h	20;"	d
+WRAPPER_KEYGEN_DEFINED__	App/Enclave_u.h	28;"	d
+WRAPPER_PRINT_KEY_DEFINED__	App/Enclave_u.h	24;"	d
+ecall_addr	Enclave/Enclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[3];$/;"	m	struct:__anon2::__anon3	file:
+ecall_table	Enclave/Enclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[3];$/;"	m	struct:__anon2	typeref:struct:__anon2::__anon3	file:
+entry_table	Enclave/Enclave_t.c	/^	uint8_t entry_table[6][3];$/;"	m	struct:__anon4	file:
+g_dyn_entry_table	Enclave/Enclave_t.c	/^} g_dyn_entry_table = {$/;"	v	typeref:struct:__anon4
+g_ecall_table	Enclave/Enclave_t.c	/^} g_ecall_table = {$/;"	v	typeref:struct:__anon2
+get_key	App/Enclave_u.c	/^sgx_status_t get_key(sgx_enclave_id_t eid, char* got)$/;"	f
+get_key	Enclave/Enclave.cpp	/^get_key(char * got){$/;"	f
+is_priv	Enclave/Enclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[3];$/;"	m	struct:__anon2::__anon3	file:
+key	Enclave/Enclave.cpp	/^char key[1024];$/;"	v
+keygen	App/Enclave_u.c	/^sgx_status_t keygen(sgx_enclave_id_t eid)$/;"	f
+keygen	Enclave/Enclave.cpp	/^keygen(){$/;"	f
+ms_eid	App/Enclave_u.c	/^	sgx_enclave_id_t ms_eid;$/;"	m	struct:ms_wrapper_get_key_t	file:
+ms_eid	App/Enclave_u.c	/^	sgx_enclave_id_t ms_eid;$/;"	m	struct:ms_wrapper_keygen_t	file:
+ms_eid	App/Enclave_u.c	/^	sgx_enclave_id_t ms_eid;$/;"	m	struct:ms_wrapper_print_key_t	file:
+ms_eid	Enclave/Enclave_t.c	/^	sgx_enclave_id_t ms_eid;$/;"	m	struct:ms_wrapper_get_key_t	file:
+ms_eid	Enclave/Enclave_t.c	/^	sgx_enclave_id_t ms_eid;$/;"	m	struct:ms_wrapper_keygen_t	file:
+ms_eid	Enclave/Enclave_t.c	/^	sgx_enclave_id_t ms_eid;$/;"	m	struct:ms_wrapper_print_key_t	file:
+ms_get_key_t	App/Enclave_u.c	/^typedef struct ms_get_key_t {$/;"	s	file:
+ms_get_key_t	App/Enclave_u.c	/^} ms_get_key_t;$/;"	t	typeref:struct:ms_get_key_t	file:
+ms_get_key_t	Enclave/Enclave_t.c	/^typedef struct ms_get_key_t {$/;"	s	file:
+ms_get_key_t	Enclave/Enclave_t.c	/^} ms_get_key_t;$/;"	t	typeref:struct:ms_get_key_t	file:
+ms_got	App/Enclave_u.c	/^	char* ms_got;$/;"	m	struct:ms_get_key_t	file:
+ms_got	App/Enclave_u.c	/^	char* ms_got;$/;"	m	struct:ms_print_data_t	file:
+ms_got	App/Enclave_u.c	/^	char* ms_got;$/;"	m	struct:ms_wrapper_get_key_t	file:
+ms_got	Enclave/Enclave_t.c	/^	char* ms_got;$/;"	m	struct:ms_get_key_t	file:
+ms_got	Enclave/Enclave_t.c	/^	char* ms_got;$/;"	m	struct:ms_print_data_t	file:
+ms_got	Enclave/Enclave_t.c	/^	char* ms_got;$/;"	m	struct:ms_wrapper_get_key_t	file:
+ms_got_len	App/Enclave_u.c	/^	size_t ms_got_len;$/;"	m	struct:ms_get_key_t	file:
+ms_got_len	Enclave/Enclave_t.c	/^	size_t ms_got_len;$/;"	m	struct:ms_get_key_t	file:
+ms_ocall_print_t	App/Enclave_u.c	/^typedef struct ms_ocall_print_t {$/;"	s	file:
+ms_ocall_print_t	App/Enclave_u.c	/^} ms_ocall_print_t;$/;"	t	typeref:struct:ms_ocall_print_t	file:
+ms_ocall_print_t	Enclave/Enclave_t.c	/^typedef struct ms_ocall_print_t {$/;"	s	file:
+ms_ocall_print_t	Enclave/Enclave_t.c	/^} ms_ocall_print_t;$/;"	t	typeref:struct:ms_ocall_print_t	file:
+ms_print_data_t	App/Enclave_u.c	/^typedef struct ms_print_data_t {$/;"	s	file:
+ms_print_data_t	App/Enclave_u.c	/^} ms_print_data_t;$/;"	t	typeref:struct:ms_print_data_t	file:
+ms_print_data_t	Enclave/Enclave_t.c	/^typedef struct ms_print_data_t {$/;"	s	file:
+ms_print_data_t	Enclave/Enclave_t.c	/^} ms_print_data_t;$/;"	t	typeref:struct:ms_print_data_t	file:
+ms_retval	App/Enclave_u.c	/^	unsigned int ms_retval;$/;"	m	struct:ms_wrapper_init_enclave_t	file:
+ms_retval	Enclave/Enclave_t.c	/^	unsigned int ms_retval;$/;"	m	struct:ms_wrapper_init_enclave_t	file:
+ms_value	App/Enclave_u.c	/^	char* ms_value;$/;"	m	struct:ms_ocall_print_t	file:
+ms_value	Enclave/Enclave_t.c	/^	char* ms_value;$/;"	m	struct:ms_ocall_print_t	file:
+ms_wrapper_get_key_t	App/Enclave_u.c	/^typedef struct ms_wrapper_get_key_t {$/;"	s	file:
+ms_wrapper_get_key_t	App/Enclave_u.c	/^} ms_wrapper_get_key_t;$/;"	t	typeref:struct:ms_wrapper_get_key_t	file:
+ms_wrapper_get_key_t	Enclave/Enclave_t.c	/^typedef struct ms_wrapper_get_key_t {$/;"	s	file:
+ms_wrapper_get_key_t	Enclave/Enclave_t.c	/^} ms_wrapper_get_key_t;$/;"	t	typeref:struct:ms_wrapper_get_key_t	file:
+ms_wrapper_init_enclave_t	App/Enclave_u.c	/^typedef struct ms_wrapper_init_enclave_t {$/;"	s	file:
+ms_wrapper_init_enclave_t	App/Enclave_u.c	/^} ms_wrapper_init_enclave_t;$/;"	t	typeref:struct:ms_wrapper_init_enclave_t	file:
+ms_wrapper_init_enclave_t	Enclave/Enclave_t.c	/^typedef struct ms_wrapper_init_enclave_t {$/;"	s	file:
+ms_wrapper_init_enclave_t	Enclave/Enclave_t.c	/^} ms_wrapper_init_enclave_t;$/;"	t	typeref:struct:ms_wrapper_init_enclave_t	file:
+ms_wrapper_keygen_t	App/Enclave_u.c	/^typedef struct ms_wrapper_keygen_t {$/;"	s	file:
+ms_wrapper_keygen_t	App/Enclave_u.c	/^} ms_wrapper_keygen_t;$/;"	t	typeref:struct:ms_wrapper_keygen_t	file:
+ms_wrapper_keygen_t	Enclave/Enclave_t.c	/^typedef struct ms_wrapper_keygen_t {$/;"	s	file:
+ms_wrapper_keygen_t	Enclave/Enclave_t.c	/^} ms_wrapper_keygen_t;$/;"	t	typeref:struct:ms_wrapper_keygen_t	file:
+ms_wrapper_print_key_t	App/Enclave_u.c	/^typedef struct ms_wrapper_print_key_t {$/;"	s	file:
+ms_wrapper_print_key_t	App/Enclave_u.c	/^} ms_wrapper_print_key_t;$/;"	t	typeref:struct:ms_wrapper_print_key_t	file:
+ms_wrapper_print_key_t	Enclave/Enclave_t.c	/^typedef struct ms_wrapper_print_key_t {$/;"	s	file:
+ms_wrapper_print_key_t	Enclave/Enclave_t.c	/^} ms_wrapper_print_key_t;$/;"	t	typeref:struct:ms_wrapper_print_key_t	file:
+nr_ecall	Enclave/Enclave_t.c	/^	size_t nr_ecall;$/;"	m	struct:__anon2	file:
+nr_ocall	App/Enclave_u.c	/^	size_t nr_ocall;$/;"	m	struct:__anon1	file:
+nr_ocall	Enclave/Enclave_t.c	/^	size_t nr_ocall;$/;"	m	struct:__anon4	file:
+ocall_print	App/App.cpp	/^    ocall_print(char *value)$/;"	f
+ocall_print	Enclave/Enclave_t.c	/^sgx_status_t SGX_CDECL ocall_print(char* value)$/;"	f
+ocall_table_Enclave	App/Enclave_u.c	/^} ocall_table_Enclave = {$/;"	v	typeref:struct:__anon1	file:
+print_data	App/App.cpp	/^    print_data(char *got)$/;"	f
+print_data	Enclave/Enclave_t.c	/^sgx_status_t SGX_CDECL print_data(char* got)$/;"	f
+print_key	App/Enclave_u.c	/^sgx_status_t print_key(sgx_enclave_id_t eid)$/;"	f
+print_key	Enclave/Enclave.cpp	/^print_key(){$/;"	f
+sgx_get_key	Enclave/Enclave_t.c	/^static sgx_status_t SGX_CDECL sgx_get_key(void* pms)$/;"	f	file:
+sgx_keygen	Enclave/Enclave_t.c	/^static sgx_status_t SGX_CDECL sgx_keygen(void* pms)$/;"	f	file:
+sgx_print_key	Enclave/Enclave_t.c	/^static sgx_status_t SGX_CDECL sgx_print_key(void* pms)$/;"	f	file:
+table	App/Enclave_u.c	/^	void * table[6];$/;"	m	struct:__anon1	file:
+wrapper_get_key	App/App.cpp	/^    void wrapper_get_key(sgx_enclave_id_t eid, char * key){$/;"	f
+wrapper_get_key	Enclave/Enclave_t.c	/^sgx_status_t SGX_CDECL wrapper_get_key(sgx_enclave_id_t eid, char* got)$/;"	f
+wrapper_init_enclave	App/App.cpp	/^    wrapper_init_enclave()$/;"	f
+wrapper_init_enclave	Enclave/Enclave_t.c	/^sgx_status_t SGX_CDECL wrapper_init_enclave(unsigned int* retval)$/;"	f
+wrapper_keygen	App/App.cpp	/^    void wrapper_keygen(sgx_enclave_id_t eid){$/;"	f
+wrapper_keygen	Enclave/Enclave_t.c	/^sgx_status_t SGX_CDECL wrapper_keygen(sgx_enclave_id_t eid)$/;"	f
+wrapper_print_key	App/App.cpp	/^    void wrapper_print_key(sgx_enclave_id_t eid){$/;"	f
+wrapper_print_key	Enclave/Enclave_t.c	/^sgx_status_t SGX_CDECL wrapper_print_key(sgx_enclave_id_t eid)$/;"	f

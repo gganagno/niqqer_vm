@@ -5,19 +5,24 @@
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
+#include "sgx_defs.h"
+#include "sgx_trts.h"
+using namespace std;
 // SGX KeyGenerator
 
-char key[1024];
-
+/* 100 keys of 16 byte len */
+char key_array[100][16];
+int active_ids = 0;
 
 void
-print_key(){
-	print_data(key);
+print_key(int id){
+    print_data(key_array[id]);
 }
 
 void
-get_key(char * got){
-//?
+get_key(int id, char got[16]){
+    
+    memcpy(got, key_array[id], 16);
 }
 
 
@@ -27,11 +32,14 @@ get_key(char * got){
 // 	return;
 // }
 
-
-void
+int
 keygen(){
-	memset(key, 0 ,1024);
-	snprintf(key,25,"abcdefghijklmopqrstuvwxyz");
+    int i;
+    char b[16];
+    sgx_read_rand((unsigned char *)b, 16);
+    b[sizeof(b) - 1] = '\0';
+    memcpy(key_array[active_ids], b, 16);
+    return active_ids;
 }
 
 
