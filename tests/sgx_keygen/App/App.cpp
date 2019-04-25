@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "sgx_urts.h"
 #include "Enclave_u.h"
-
+#define debug_print(...) printf("NIQQER_VM NATIVE: ");printf( __VA_ARGS__);
 #define ENCLAVE_FILE "libenclave.signed.so"
 
         sgx_enclave_id_t eid;
@@ -14,7 +14,7 @@ extern "C" {
     void
     print_data(char *got)
     {
-        printf("The key is: %.*s\n", 16, got);
+        debug_print("The key is: %.*s\n", 16, got);
     }
 
 
@@ -23,7 +23,7 @@ extern "C" {
     {
             int i;
             for(i = 0; i < 32; i++){
-                printf("%2.2x", value[i]);
+                debug_print("%2.2x", value[i]);
             }
         }
 
@@ -42,14 +42,14 @@ extern "C" {
         ret = SGX_SUCCESS;
         memset(buffer, 0, 1024);
         /* create the enclave */
-        printf("Creating Enclave\n");
+        debug_print("Creating Enclave\n");
         sprintf(buffer, "%s/com.oracle.max.vm.native/generated/linux/libenclave.signed.so", s);
 
         ret = sgx_create_enclave(buffer, SGX_DEBUG_FLAG, &token,
                 &updated, &eid, NULL);
 
         if (ret != SGX_SUCCESS){
-            printf("\nERROR: failed to create enclave, code: %#x\n", ret);
+            debug_print("\nERROR: failed to create enclave, code: %#x\n", ret);
             exit(EXIT_FAILURE);
         }
 
@@ -59,18 +59,19 @@ extern "C" {
         print_key(eid, id);
     }
 
-
-    char *wrapper_get_key(int id){
-        char key[16];
-        get_key(eid, id, key);
+    char *wrapper_get_key(int id, int size){
+        char *key;
+        key = (char *)calloc(sizeof(char), size);
+        get_key(eid, id, key, size);
         return strdup(key);
 }
 
 
-    int wrapper_keygen(){
+    int wrapper_keygen(int size){
         int id;
-        keygen(eid, &id);
-        printf("MY ID = %d\n", id);
+        debug_print("SIZE = %d\n", size);
+        keygen(eid, &id, size);
+        debug_print("MY ID = %d\n", id);
         return id;
     }
 

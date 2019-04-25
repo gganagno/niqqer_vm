@@ -33,11 +33,13 @@ typedef struct ms_print_key_t {
 
 typedef struct ms_keygen_t {
 	int ms_retval;
+	int ms_size;
 } ms_keygen_t;
 
 typedef struct ms_get_key_t {
 	int ms_id;
 	char* ms_got;
+	int ms_size;
 } ms_get_key_t;
 
 typedef struct ms_print_data_t {
@@ -78,7 +80,7 @@ static sgx_status_t SGX_CDECL sgx_keygen(void* pms)
 
 
 
-	ms->ms_retval = keygen();
+	ms->ms_retval = keygen(ms->ms_size);
 
 
 	return status;
@@ -94,45 +96,12 @@ static sgx_status_t SGX_CDECL sgx_get_key(void* pms)
 	ms_get_key_t* ms = SGX_CAST(ms_get_key_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
 	char* _tmp_got = ms->ms_got;
-	size_t _len_got = 16 * sizeof(char);
-	char* _in_got = NULL;
 
-	CHECK_UNIQUE_POINTER(_tmp_got, _len_got);
 
-	//
-	// fence after pointer checks
-	//
-	sgx_lfence();
 
-	if (_tmp_got != NULL && _len_got != 0) {
-		if ( _len_got % sizeof(*_tmp_got) != 0)
-		{
-			status = SGX_ERROR_INVALID_PARAMETER;
-			goto err;
-		}
-		_in_got = (char*)malloc(_len_got);
-		if (_in_got == NULL) {
-			status = SGX_ERROR_OUT_OF_MEMORY;
-			goto err;
-		}
+	get_key(ms->ms_id, _tmp_got, ms->ms_size);
 
-		if (memcpy_s(_in_got, _len_got, _tmp_got, _len_got)) {
-			status = SGX_ERROR_UNEXPECTED;
-			goto err;
-		}
 
-	}
-
-	get_key(ms->ms_id, _in_got);
-	if (_in_got) {
-		if (memcpy_s(_tmp_got, _len_got, _in_got, _len_got)) {
-			status = SGX_ERROR_UNEXPECTED;
-			goto err;
-		}
-	}
-
-err:
-	if (_in_got) free(_in_got);
 	return status;
 }
 

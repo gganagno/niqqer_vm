@@ -11,7 +11,7 @@ using namespace std;
 // SGX KeyGenerator
 
 /* 100 keys of 16 byte len */
-char key_array[100][16];
+char *key_array[100];
 int active_ids = 0;
 
 void
@@ -20,9 +20,10 @@ print_key(int id){
 }
 
 void
-get_key(int id, char got[16]){
+get_key(int id, char *got, int size){
     
-    memcpy(got, key_array[id], 16);
+    memcpy(got, key_array[id], size);
+    //got = key_array[id];
 }
 
 
@@ -33,12 +34,13 @@ get_key(int id, char got[16]){
 // }
 
 int
-keygen(){
+keygen(int size){
     int i;
-    char b[16];
-    sgx_read_rand((unsigned char *)b, 16);
-    b[sizeof(b) - 1] = '\0';
-    memcpy(key_array[active_ids], b, 16);
+    key_array[active_ids] = (char *)malloc(size * sizeof(char));
+    sgx_read_rand((unsigned char *) key_array[active_ids], size);
+    key_array[active_ids][size -1] = '\0';
+    
+    //memcpy(key_array[active_ids], b, size);
     return active_ids;
 }
 

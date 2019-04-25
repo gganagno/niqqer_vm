@@ -26,8 +26,8 @@ void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_print, (char* value));
 #endif
 
 sgx_status_t print_key(sgx_enclave_id_t eid, int id);
-sgx_status_t keygen(sgx_enclave_id_t eid, int* retval);
-sgx_status_t get_key(sgx_enclave_id_t eid, int id, char got[16]);
+sgx_status_t keygen(sgx_enclave_id_t eid, int* retval, int size);
+sgx_status_t get_key(sgx_enclave_id_t eid, int id, char* got, int size);
 
 #ifdef __cplusplus
 }

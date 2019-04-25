@@ -13,7 +13,7 @@ public class ciph {
        	kgen.init(128);
 
        	SecretKey aesKey = kgen.generateKey();
-        ciph.init(256,aesKey); // for example
+        ciph.init(256, aesKey); // for example
 
         ciph.update(new byte[5]);
 

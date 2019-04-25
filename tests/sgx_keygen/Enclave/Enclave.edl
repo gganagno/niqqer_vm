@@ -3,8 +3,8 @@ enclave {
     trusted {
         /* define ECALLs here. */
         public void print_key(int id);
-        public int keygen();
-        public void get_key(int id, [out, in]char got[16]);
+        public int keygen(int size);
+        public void get_key(int id, [user_check]char *got, int size);
     };
 
     untrusted {

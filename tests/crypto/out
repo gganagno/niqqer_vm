@@ -1,0 +1,11 @@
+AES
+NIQQER_VM keysize ->128
+SIZE -------------------- 128
+NIQQER_VM NATIVE: Creating Enclave
+NIQQER_VM NATIVE: SIZE = 16
+NIQQER_VM NATIVE: MY ID = 0
+ID = 0
+NIQQER_VM NATIVE: The key is: ≥]Û´Jèüˇgòi3q
+||
+NIQQER_VM KeySize 128
+NIQQER_VM generateKey Algorithm = AES

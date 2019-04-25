@@ -16,8 +16,8 @@ extern "C" {
 #endif
 
 void print_key(int id);
-int keygen(void);
-void get_key(int id, char got[16]);
+int keygen(int size);
+void get_key(int id, char* got, int size);
 
 sgx_status_t SGX_CDECL print_data(char got[16]);
 sgx_status_t SGX_CDECL ocall_print(char* value);
