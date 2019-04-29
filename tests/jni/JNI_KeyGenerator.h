@@ -18,10 +18,10 @@ JNIEXPORT jint JNICALL Java_JNI_1KeyGenerator_SGX_1KeyGenerator_1init
 /*
  * Class:     JNI_KeyGenerator
  * Method:    SGX_KeyGenerator_generateKey
- * Signature: ()I
+ * Signature: (I)I
  */
 JNIEXPORT jint JNICALL Java_JNI_1KeyGenerator_SGX_1KeyGenerator_1generateKey
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jint);
 
 #ifdef __cplusplus
 }

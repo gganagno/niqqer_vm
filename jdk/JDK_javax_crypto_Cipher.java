@@ -12,14 +12,16 @@ import com.sun.max.vm.jni.*;
 @METHOD_SUBSTITUTIONS(javax.crypto.Cipher.class)
 final class JDK_javax_crypto_Cipher {
 
-    @SUBSTITUTE
+    /*
+     @SUBSTITUTE
     public void init(int opmode,Key key) {
 
         System.loadLibrary("hello");
-
+        System.out.println("java: Cipher_init algo: " + key.getAlgorithm());
         jni_cipher_helper n = new jni_cipher_helper();
         System.out.println("java: Cipher_init: " + n.SGX_Cipher_init());
     }
+    */
 
     @SUBSTITUTE
     public byte[] update(byte[] input) {
@@ -43,6 +45,20 @@ final class JDK_javax_crypto_Cipher {
         return new byte[10];
     }
 
+    /* Used for RSA*/
+    @SUBSTITUTE
+    public byte[] doFinal(byte[] b) {
+
+        System.loadLibrary("hello");
+
+        jni_cipher_helper n = new jni_cipher_helper();        
+        System.out.println("java: Cipher_dofinal: " + n.SGX_Cipher_dofinal_xd(b));
+
+        return new byte[10];
+    }
+
+
+
 }
 
 
@@ -53,5 +69,6 @@ class jni_cipher_helper {
     public native char SGX_Cipher_update();
 
     public native char SGX_Cipher_dofinal();
+    public native char SGX_Cipher_dofinal_xd(byte[] b);
 
 }

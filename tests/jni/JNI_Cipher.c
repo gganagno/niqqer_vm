@@ -1,4 +1,3 @@
-// Save as "HelloJNI.c"
 #include <jni.h>        // JNI header provided by JDK
 #include <stdio.h>      // C Standard IO Header
 #include "JNI_Cipher.h"   // Generated
@@ -33,6 +32,14 @@ JNIEXPORT char * JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher
 JNIEXPORT char * JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher_1dofinal(JNIEnv *env, jobject thisObj) {
 
 	printf("Entry Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher_1dofinal!\n");
+	return NULL;
+
+}
+
+
+JNIEXPORT char * JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher_1dofinal_1xd(JNIEnv *env, jobject thisObj, jbyteArray b) {
+
+	printf("Entry Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher_1dofinal! bytearray\n");
 	return NULL;
 
 }
