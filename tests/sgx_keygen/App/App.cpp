@@ -12,9 +12,21 @@ sgx_enclave_id_t eid;
 extern "C" {
 
     void
-        print_data(char *got)
+    print_rsa_key(uint8_t *r){
+        int i;
+        for (i = 0; i < 32; i++)
+            printf("%x", r[i]);
+        printf("\n");
+    }
+        
+    void
+        print_data(char *got, int len)
         {
-            debug_print("The key is: %.*s\n", 16, got);
+            int i;
+            debug_print("The Key is\n||");
+            for (i = 0; i < len; i++)
+                debug_print("%x", got[i]);
+            printf("||\n");
         }
 
 
@@ -52,7 +64,15 @@ extern "C" {
                 debug_print("\nERROR: failed to create enclave, code: %#x\n", ret);
                 exit(EXIT_FAILURE);
             }
-
+            int step;
+            sgx_status_t error;
+            Test(eid, &step, &error);
+            
+            if (error) 
+                printf("Failed on step %d\n", error);
+            else
+                printf("COMPLETE!\n");
+            exit(-1);
         }
 
     void wrapper_print_key(int id){

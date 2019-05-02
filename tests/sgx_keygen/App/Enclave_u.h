@@ -16,9 +16,13 @@
 extern "C" {
 #endif
 
+#ifndef PRINT_RSA_KEY_DEFINED__
+#define PRINT_RSA_KEY_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, print_rsa_key, (uint8_t* r));
+#endif
 #ifndef PRINT_DATA_DEFINED__
 #define PRINT_DATA_DEFINED__
-void SGX_UBRIDGE(SGX_NOCONVENTION, print_data, (char got[16]));
+void SGX_UBRIDGE(SGX_NOCONVENTION, print_data, (char* got, int len));
 #endif
 #ifndef OCALL_PRINT_DEFINED__
 #define OCALL_PRINT_DEFINED__
@@ -28,6 +32,7 @@ void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_print, (char* value));
 sgx_status_t print_key(sgx_enclave_id_t eid, int id);
 sgx_status_t keygen(sgx_enclave_id_t eid, int* retval, int size);
 sgx_status_t get_key(sgx_enclave_id_t eid, int id, char* got, int size);
+sgx_status_t Test(sgx_enclave_id_t eid, int* retval, sgx_status_t* error);
 
 #ifdef __cplusplus
 }

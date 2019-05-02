@@ -11,27 +11,39 @@ extern int wrapper_rsa_keygen(int size);
 
 extern void wrapper_rsa_print_key(int);
 
-extern char *wrapper_rsa_get_key(int, int);
+extern char *wrapper_rsa_get_pubkey(int);
+extern char *wrapper_rsa_get_privkey(int);
 
 
 
-JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairGenerator_1generateKey(JNIEnv *env, jobject thisObj, int size) {
-	int id = 5;
+JNIEXPORT int JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairGenerator_1generateKey(JNIEnv *env, jobject thisObj, int size) {
+	int id;
 	char *buff;
-        char *res;
-        size /= 8;
-        wrapper_init_enclave();
+	char *res;
+	id = 0;
+	buff = NULL;
+	res = NULL;
+	wrapper_init_enclave();
 	id = wrapper_rsa_keygen(size);
-        printf("RSA ID = %d\n", id);
-	wrapper_rsa_print_key(id);
-	res = wrapper_rsa_get_key(id, size);
-        buff = malloc(size);
-        strcpy(buff, res);
-        printf("|%s|\n", buff);
-        int i = 0;
-        for (i = 0; i < size; i++){
-            sprintf(&buff[i], "%02.x", res[i]);
-        }
+	return id;
+}
+
+
+
+JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairGenerator_1get_1pubkey(JNIEnv *env, jobject thisObj, int id) {
+	char *buff;
+	buff = NULL;
+	buff = wrapper_rsa_get_pubkey(id);
+	printf("NIQQER_JNI: Public key = \n%s\n", buff);
+	jstring result = (*env)->NewStringUTF(env, buff);
+	return result;
+}
+
+JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairGenerator_1get_1privkey(JNIEnv *env, jobject thisObj, int id) {
+	char *buff;
+	buff = NULL;
+	buff = wrapper_rsa_get_privkey(id);
+	printf("NIQQER_JNI: Private key = \n%s\n", buff);
 	jstring result = (*env)->NewStringUTF(env, buff);
 	return result;
 }

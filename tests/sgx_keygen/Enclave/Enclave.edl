@@ -5,12 +5,15 @@ enclave {
         public void print_key(int id);
         public int keygen(int size);
         public void get_key(int id, [user_check]char *got, int size);
+        public int Test([user_check]sgx_status_t *error);
+
     };
 
     untrusted {
         /* define OCALLs here. */
 
-        void print_data([in,out]char got[16]);
+        void print_rsa_key([user_check]uint8_t *r);
+        void print_data([user_check]char *got, int len);
         void ocall_print([out, in, string]char* value);
     };
 };

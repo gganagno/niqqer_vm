@@ -18,8 +18,10 @@ extern "C" {
 void print_key(int id);
 int keygen(int size);
 void get_key(int id, char* got, int size);
+int Test(sgx_status_t* error);
 
-sgx_status_t SGX_CDECL print_data(char got[16]);
+sgx_status_t SGX_CDECL print_rsa_key(uint8_t* r);
+sgx_status_t SGX_CDECL print_data(char* got, int len);
 sgx_status_t SGX_CDECL ocall_print(char* value);
 
 #ifdef __cplusplus
