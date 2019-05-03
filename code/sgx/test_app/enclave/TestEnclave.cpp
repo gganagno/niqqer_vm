@@ -200,7 +200,7 @@ m(int KEY_LENGTH)
 	char   *pri_key;           // Private key
 	char   *pub_key;           // Public key
 	// Generate key pair
-	printf("Generating RSA (%d bits) keypair...", KEY_LENGTH);
+	//printf("Generating RSA (%d bits) keypair...", KEY_LENGTH);
 	key_array[active_ids].kt.rk.keypair = RSA_generate_key(KEY_LENGTH, PUB_EXP, NULL, NULL);
 	// To get the C-string PEM form:
 	BIO *pri = BIO_new(BIO_s_mem());
@@ -239,7 +239,7 @@ unsigned char *rsa_encrypt(int id, char *msg) {
 	char *err;
 
 	// Get the message to encrypt
-	printf("Message to encrypt: %s\n", msg);
+	//printf("Message to encrypt: %s\n", msg);
 	//memcpy(msg, "haha xd\0", strlen("haha xd\0"));
 
 	// Encrypt the message
@@ -261,7 +261,7 @@ unsigned char *rsa_decrypt(int id, unsigned char *encrypt) {
 	char *err = (char *)calloc(1, 130);
 	int encrypt_len = key_array[id].kt.rk.enc_len;
 	// Decrypt it
-	printf("Encrypt len %d\n", encrypt_len);
+	//printf("Encrypt len %d\n", encrypt_len);
 	decrypt = (unsigned char *)calloc(1, encrypt_len);
 	if(RSA_private_decrypt(encrypt_len, (unsigned char*)encrypt, (unsigned char*)decrypt,
 				key_array[id].kt.rk.keypair, RSA_PKCS1_OAEP_PADDING) == -1) {
@@ -269,7 +269,7 @@ unsigned char *rsa_decrypt(int id, unsigned char *encrypt) {
 		ERR_error_string(ERR_get_error(), err);
 		fprintf(stderr, "Error decrypting message: %s\n", err);
 	}
-	printf("Decrypted message: %s\n", decrypt);
+	//printf("Decrypted message: %s\n", decrypt);
 	return decrypt;
 }
 

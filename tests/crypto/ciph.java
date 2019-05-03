@@ -12,7 +12,6 @@ public class ciph {
 
 		KeyGenerator kgen = KeyGenerator.getInstance("AES");
 		kgen.init(128);
-
 		SecretKey aesKey = kgen.generateKey();
 		ciph.init(Cipher.ENCRYPT_MODE, aesKey); // for example
 		ciph2.init(Cipher.DECRYPT_MODE, aesKey); // for example

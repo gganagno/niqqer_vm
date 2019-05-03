@@ -57,15 +57,21 @@ public class rsa {
 		KeyPair keyPair = buildKeyPair();
 		PublicKey pubKey = keyPair.getPublic();
 		PrivateKey privateKey = keyPair.getPrivate();
+		KeyPair keyPair2 = buildKeyPair();
+		PublicKey pubKey2 = keyPair2.getPublic();
+		PrivateKey privateKey2 = keyPair2.getPrivate();
 
 
 		// sign the message
+		byte [] signed2 = encrypt(privateKey2, "This is a secret message21122");     
 		byte [] signed = encrypt(privateKey, "This is a secret message");     
 		//System.out.println(new String(signed));  // <<signed message>>
 
 		// verify the message
 		byte[] verified = decrypt(pubKey, signed);                                 
+		byte[] verified2 = decrypt(pubKey2, signed2);                                 
 		System.out.println(new String(verified));     // This is a secret message
+		System.out.println(new String(verified2));     // This is a secret message
 	}
 
 	public static KeyPair buildKeyPair() throws NoSuchAlgorithmException {

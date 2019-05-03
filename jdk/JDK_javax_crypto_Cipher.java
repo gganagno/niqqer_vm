@@ -14,7 +14,7 @@ final class JDK_javax_crypto_Cipher {
 
 
 	@SUBSTITUTE
-	public void init(int opmode,Key key) {
+	public void init(int opmode, Key key) {
 		System.loadLibrary("hello");
 
 		jni_cipher_helper n = new jni_cipher_helper();
@@ -25,7 +25,7 @@ final class JDK_javax_crypto_Cipher {
 		else 
 			p.algo = 1;	
 		JDK_java_security_KeyPair.myhash.put((Object)this, p);
-		
+
 	}
 	/* Used for RSA*/
 	@SUBSTITUTE
@@ -33,43 +33,15 @@ final class JDK_javax_crypto_Cipher {
 		int id = 0; 
 		custom_info c = new custom_info();
 		System.loadLibrary("hello");              
-                                	
+
 		c = JDK_java_security_KeyPair.myhash.get((Object)this);
 		id = c.id;
-	
+
 		jni_cipher_helper n = new jni_cipher_helper();                           
-		//String n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);	
 		byte[] n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);	
-		System.out.println("@@" +  n1);
 		System.out.println("@@" +  n1.toString());
 		return n1;
 	}                                                                           
-	//    }
-	//
-	//    @SUBSTITUTE
-	//    public byte[] doFinal() {
-	//
-	//        System.loadLibrary("hello");
-	//
-	//        jni_cipher_helper n = new jni_cipher_helper();        
-	//        System.out.println("java: Cipher_dofinal: " + n.SGX_Cipher_dofinal());
-	//
-	//        return new byte[10];
-	//    }
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-
 
 }
 

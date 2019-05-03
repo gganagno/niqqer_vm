@@ -15,19 +15,20 @@ import java.util.Enumeration;
 
 final class JDK_javax_crypto_KeyGenerator {
 
-    static String algo;
-    static int key_size;
 
     @SUBSTITUTE
     public final void init(int keysize) {
-        System.out.println("NIQQER_VM keysize ->" + keysize);
-        key_size = keysize;
+		custom_info p = new custom_info();
+		p.keysize = keysize;
+		p.id = -1;
+		p.type = -1;
+		p.algo = 0;
+		JDK_java_security_KeyPair.myhash.put(this, p);
     }
 
 
     @SUBSTITUTE
     static KeyGenerator getInstance(String algorithm) {
-        algo = algorithm;
         KeyGenerator k = null;   
         try {
             Provider p[] = Security.getProviders();
@@ -52,7 +53,6 @@ final class JDK_javax_crypto_KeyGenerator {
 
 
             k = KeyGenerator.getInstance(algorithm, p[found]);//k.getProvider().toString(), algorithm);
-            algo = algorithm;
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -61,14 +61,20 @@ final class JDK_javax_crypto_KeyGenerator {
 
     @SUBSTITUTE
     public SecretKey generateKey() {
+		int keysize;
+        int id;
+		custom_info p = JDK_java_security_KeyPair.myhash.get(this);
+		keysize = p.keysize;
         System.loadLibrary("hello");
         jni_keygenerator_helper n = new jni_keygenerator_helper();
-        
-        String java_key = n.SGX_KeyGenerator_generateKey(key_size);
+		id = n.SGX_KeyGenerator_getid(keysize);
+        String java_key = n.SGX_KeyGenerator_generateKey(keysize, id);
 		System.out.println("JAVA KEY --> " + java_key);
         SecretKeySpec ss = new SecretKeySpec(java_key.getBytes(), "AES");
-        System.out.println("NIQQER_VM generateKey Algorithm = " + algo);
-
+        System.out.println("NIQQER_VM generateKey Algorithm = " + p.algo);
+		
+		p.id = id;
+		JDK_java_security_KeyPair.myhash.put(ss, p);
         return ss;
     }
 
@@ -77,6 +83,7 @@ final class JDK_javax_crypto_KeyGenerator {
 
 class jni_keygenerator_helper {
 
-    public native String SGX_KeyGenerator_generateKey(int size);
+    public native String SGX_KeyGenerator_generateKey(int size, int id);
+    public native int SGX_KeyGenerator_getid(int size);
 
 }

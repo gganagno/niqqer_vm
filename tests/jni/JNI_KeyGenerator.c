@@ -15,15 +15,20 @@ extern char *wrapper_get_key(int, int);
 
 
 
-JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1generateKey(JNIEnv *env, jobject thisObj, int size) {
+JNIEXPORT int JNICALL Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1getid(JNIEnv *env, jobject thisObj, int size) {
 
 	int id;
-	int i = 0;
-	char *buff;
-	char *res;
 	size /= 8;
 	wrapper_init_enclave();
 	id = wrapper_keygen(size);
+	return id;
+}
+JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_1KeyGenerator_1generateKey(JNIEnv *env, jobject thisObj, int size, int id) {
+	int i = 0;
+	char *buff;
+	char *res;
+
+	size /= 8;
 	printf("ID = %d\n", id);
 	wrapper_print_key(id);
 	res = wrapper_get_key(id, size);

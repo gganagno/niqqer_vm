@@ -52,11 +52,18 @@ final class JDK_java_security_KeyPair {
 	}
 }
 
+/**
+ @ id is the enclave specific entry
+ @ type is encrpytion/decryption
+ @ algo is aes = 0 / rsa = 1
+ @ keysize is the keysize :P
+**/
 
 class custom_info {
 	int id;
 	int type;
 	int algo;
+	int keysize;
 };
 
 

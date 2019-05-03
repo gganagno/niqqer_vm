@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-
+#define printf(...) ;
 
 extern unsigned int wrapper_init_enclave();
 
@@ -54,6 +54,15 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
 	if (mode == 1) {
 		if (algo == 1){
 			res = wrapper_rsa_encrypt(id, (char *)elements);
+
+
+
+
+
+		} else 
+			res = wrapper_aes_encrypt(id, (char *)elements, (int)num_bytes);
+
+
 			char *lala = (char *)malloc(keysize + 1);
 
 			memcpy(lala, res, keysize);
@@ -77,11 +86,6 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
 			return data;
 
 
-
-
-
-		} else 
-			res = wrapper_aes_encrypt(id, (char *)elements, (int)num_bytes);
 		printf("Encrypt\n");
 	}else {
 		printf("Decrypt\n");
@@ -106,7 +110,24 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
 			(*env)->SetByteArrayRegion(env, data, 0, keysize, bytes);
 			return data;
 		}else
-			printf("AES\n");
+			res = wrapper_aes_decrypt(id, (char *)elements, keysize);
+			keysize = strlen((char *)res);
+			jbyteArray data = (*env)->NewByteArray(env, keysize);
+			if (data == NULL) {
+				return NULL; //  out of memory error thrown
+			}
+
+			// creat bytes from byteUrl
+			jbyte *bytes = (*env)->GetByteArrayElements(env, data, 0);
+			int i;
+			for (i = 0; i < keysize; i++) {
+				bytes[i] = res[i];
+			}
+
+			// move from the temp structure to the java structure
+			(*env)->SetByteArrayRegion(env, data, 0, keysize, bytes);
+			return data;
+
 	}
 	jstring result = (*env)->NewStringUTF(env, res);
 	return result;
