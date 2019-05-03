@@ -58,15 +58,20 @@ typedef struct ms_get_privkey_t {
 } ms_get_privkey_t;
 
 typedef struct ms_rsa_encrypt_t {
-	char* ms_retval;
+	unsigned char* ms_retval;
 	int ms_id;
 	char* ms_msg;
 } ms_rsa_encrypt_t;
 
-typedef struct ms_rsa_decrypt_t {
-	char* ms_retval;
+typedef struct ms_rsa_get_key_size_t {
+	int ms_retval;
 	int ms_id;
-	char* ms_msg;
+} ms_rsa_get_key_size_t;
+
+typedef struct ms_rsa_decrypt_t {
+	unsigned char* ms_retval;
+	int ms_id;
+	unsigned char* ms_msg;
 } ms_rsa_decrypt_t;
 
 typedef struct ms_aes_encrypt_t {
@@ -75,6 +80,13 @@ typedef struct ms_aes_encrypt_t {
 	char* ms_msg;
 	int ms_len;
 } ms_aes_encrypt_t;
+
+typedef struct ms_aes_decrypt_t {
+	char* ms_retval;
+	int ms_id;
+	char* ms_msg;
+	int ms_len;
+} ms_aes_decrypt_t;
 
 typedef struct ms_uprint_t {
 	const char* ms_str;
@@ -258,6 +270,24 @@ static sgx_status_t SGX_CDECL sgx_rsa_encrypt(void* pms)
 	return status;
 }
 
+static sgx_status_t SGX_CDECL sgx_rsa_get_key_size(void* pms)
+{
+	CHECK_REF_POINTER(pms, sizeof(ms_rsa_get_key_size_t));
+	//
+	// fence after pointer checks
+	//
+	sgx_lfence();
+	ms_rsa_get_key_size_t* ms = SGX_CAST(ms_rsa_get_key_size_t*, pms);
+	sgx_status_t status = SGX_SUCCESS;
+
+
+
+	ms->ms_retval = rsa_get_key_size(ms->ms_id);
+
+
+	return status;
+}
+
 static sgx_status_t SGX_CDECL sgx_rsa_decrypt(void* pms)
 {
 	CHECK_REF_POINTER(pms, sizeof(ms_rsa_decrypt_t));
@@ -267,7 +297,7 @@ static sgx_status_t SGX_CDECL sgx_rsa_decrypt(void* pms)
 	sgx_lfence();
 	ms_rsa_decrypt_t* ms = SGX_CAST(ms_rsa_decrypt_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-	char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_msg = ms->ms_msg;
 
 
 
@@ -296,6 +326,25 @@ static sgx_status_t SGX_CDECL sgx_aes_encrypt(void* pms)
 	return status;
 }
 
+static sgx_status_t SGX_CDECL sgx_aes_decrypt(void* pms)
+{
+	CHECK_REF_POINTER(pms, sizeof(ms_aes_decrypt_t));
+	//
+	// fence after pointer checks
+	//
+	sgx_lfence();
+	ms_aes_decrypt_t* ms = SGX_CAST(ms_aes_decrypt_t*, pms);
+	sgx_status_t status = SGX_SUCCESS;
+	char* _tmp_msg = ms->ms_msg;
+
+
+
+	ms->ms_retval = aes_decrypt(ms->ms_id, _tmp_msg, ms->ms_len);
+
+
+	return status;
+}
+
 static sgx_status_t SGX_CDECL sgx_startup(void* pms)
 {
 	sgx_status_t status = SGX_SUCCESS;
@@ -306,9 +355,9 @@ static sgx_status_t SGX_CDECL sgx_startup(void* pms)
 
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[10];
+	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[12];
 } g_ecall_table = {
-	10,
+	12,
 	{
 		{(void*)(uintptr_t)sgx_generate_keypair, 0},
 		{(void*)(uintptr_t)sgx_print_key, 0},
@@ -317,29 +366,31 @@ SGX_EXTERNC const struct {
 		{(void*)(uintptr_t)sgx_get_pubkey, 0},
 		{(void*)(uintptr_t)sgx_get_privkey, 0},
 		{(void*)(uintptr_t)sgx_rsa_encrypt, 0},
+		{(void*)(uintptr_t)sgx_rsa_get_key_size, 0},
 		{(void*)(uintptr_t)sgx_rsa_decrypt, 0},
 		{(void*)(uintptr_t)sgx_aes_encrypt, 0},
+		{(void*)(uintptr_t)sgx_aes_decrypt, 0},
 		{(void*)(uintptr_t)sgx_startup, 0},
 	}
 };
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[11][10];
+	uint8_t entry_table[11][12];
 } g_dyn_entry_table = {
 	11,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 

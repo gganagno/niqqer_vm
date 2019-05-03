@@ -30,6 +30,11 @@ struct rsa_key_t{
 	short enc_len;
 }rsa_key;
 
+struct aes_key_t {
+	unsigned char *key;
+	int enc_len;
+};
+
 /* 100 keys of 16 byte len */
 struct key_array_t {
 	short size;
@@ -83,6 +88,19 @@ aes_encrypt(int id, char *text, int len)
 	return (char *)out2;
 }
 
+char *
+aes_decrypt(int id, char *text, int len) 
+{
+	int size = key_array[id].size;	
+	unsigned char *out =  (unsigned char *)calloc(size, sizeof(unsigned char));
+	unsigned char *out2 = (unsigned char *)calloc(size, sizeof(unsigned char));
+	AES_KEY enc_key, dec_key;
+	AES_set_encrypt_key(key_array[id].kt.key, size * 8, &enc_key);
+	AES_encrypt((unsigned char *)text, out, &enc_key);
+	AES_set_decrypt_key(key_array[id].kt.key, size * 8, &dec_key);
+	AES_decrypt(out, out2, &dec_key);
+	return (char *)out2;
+}
 
 
 
@@ -187,7 +205,7 @@ m(int KEY_LENGTH)
 	// To get the C-string PEM form:
 	BIO *pri = BIO_new(BIO_s_mem());
 	BIO *pub = BIO_new(BIO_s_mem());
-
+	key_array[active_ids].size = KEY_LENGTH;
 	PEM_write_bio_RSAPrivateKey(pri, key_array[active_ids].kt.rk.keypair, NULL, NULL, 0, NULL, NULL);
 	PEM_write_bio_RSAPublicKey(pub,  key_array[active_ids].kt.rk.keypair);
 
@@ -209,8 +227,15 @@ m(int KEY_LENGTH)
 	return active_ids++;
 }
 
-char *rsa_encrypt(int id, char *msg) {
-	char *encrypt;
+
+int rsa_get_key_size(int id)
+{
+
+	return key_array[id].size;
+
+}
+unsigned char *rsa_encrypt(int id, char *msg) {
+	unsigned char *encrypt;
 	char *err;
 
 	// Get the message to encrypt
@@ -218,7 +243,7 @@ char *rsa_encrypt(int id, char *msg) {
 	//memcpy(msg, "haha xd\0", strlen("haha xd\0"));
 
 	// Encrypt the message
-	encrypt = (char *)calloc(1, RSA_size(key_array[id].kt.rk.keypair));
+	encrypt = (unsigned char *)calloc(RSA_size(key_array[id].kt.rk.keypair), sizeof(unsigned char));
 	int encrypt_len;
 	err = (char *)calloc(1, 130);
 	if((encrypt_len = RSA_public_encrypt(strlen(msg)+1, (unsigned char*)msg, (unsigned char*)encrypt,
@@ -231,12 +256,13 @@ char *rsa_encrypt(int id, char *msg) {
 	return encrypt;
 }
 
-char *rsa_decrypt(int id, char *encrypt) {
-	char *decrypt = NULL;    // Decrypted message
+unsigned char *rsa_decrypt(int id, unsigned char *encrypt) {
+	unsigned char *decrypt = NULL;    // Decrypted message
 	char *err = (char *)calloc(1, 130);
 	int encrypt_len = key_array[id].kt.rk.enc_len;
 	// Decrypt it
-	decrypt = (char *)calloc(1, encrypt_len);
+	printf("Encrypt len %d\n", encrypt_len);
+	decrypt = (unsigned char *)calloc(1, encrypt_len);
 	if(RSA_private_decrypt(encrypt_len, (unsigned char*)encrypt, (unsigned char*)decrypt,
 				key_array[id].kt.rk.keypair, RSA_PKCS1_OAEP_PADDING) == -1) {
 		ERR_load_crypto_strings();

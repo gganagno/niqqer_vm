@@ -21,9 +21,11 @@ int keygen(int size);
 void get_key(int id, char* got, int size);
 char* get_pubkey(int id);
 char* get_privkey(int id);
-char* rsa_encrypt(int id, char* msg);
-char* rsa_decrypt(int id, char* msg);
+unsigned char* rsa_encrypt(int id, char* msg);
+int rsa_get_key_size(int id);
+unsigned char* rsa_decrypt(int id, unsigned char* msg);
 char* aes_encrypt(int id, char* msg, int len);
+char* aes_decrypt(int id, char* msg, int len);
 void startup(void);
 
 sgx_status_t SGX_CDECL uprint(const char* str);

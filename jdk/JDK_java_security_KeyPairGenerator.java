@@ -179,7 +179,7 @@ final class JDK_java_security_KeyPairGenerator {
 			String content = new String(key);
 			content = content.replaceAll("\\n", "").replace("-----BEGIN RSA PRIVATE KEY-----", "")
 				.replace("-----END RSA PRIVATE KEY-----", "");
-			System.out.println("'" + content + "'");
+			//System.out.println("'" + content + "'");
 			byte[] bytes = Base64.getDecoder().decode(content);
 
 			DerInputStream derReader = new DerInputStream(bytes);
@@ -212,8 +212,6 @@ final class JDK_java_security_KeyPairGenerator {
 
 
 
-
-
 	@SUBSTITUTE
 	public final KeyPair genKeyPair() {	
 
@@ -240,7 +238,11 @@ final class JDK_java_security_KeyPairGenerator {
 
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			PublicKey myPublicKey = keyFactory.generatePublic(publicKeySpec);
-			JDK_java_security_KeyPair.addkey(myPublicKey, id);
+			custom_info c = new custom_info();
+			c.id = id;
+			c.type = 0;
+			JDK_java_security_KeyPair.addkey(myPublicKey, c);
+			JDK_java_security_KeyPair.addkey(privatekey, c);
 			KeyPair p1 = new KeyPair(myPublicKey, privatekey);
 			return p1;
 		} catch (Exception e) {

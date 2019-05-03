@@ -57,10 +57,11 @@ enclave {
         public void get_key(int id, [user_check]char *got, int size);
         public char *get_pubkey(int id);
         public char *get_privkey(int id);
-        public char *rsa_encrypt(int id, [user_check] char *msg);
-        public char *rsa_decrypt(int id, [user_check] char *msg);
+        public unsigned char *rsa_encrypt(int id, [user_check] char *msg);
+        public int rsa_get_key_size(int id);
+        public unsigned char *rsa_decrypt(int id, [user_check] unsigned char *msg);
 		public char *aes_encrypt(int id, [user_check] char *msg, int len);
-        //public char *aes_decrypt(int id, [user_check] char *msg);
+        public char *aes_decrypt(int id, [user_check] char *msg, int len);
 
         public void startup();
     };

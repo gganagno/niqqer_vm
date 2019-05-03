@@ -67,9 +67,11 @@ sgx_status_t keygen(sgx_enclave_id_t eid, int* retval, int size);
 sgx_status_t get_key(sgx_enclave_id_t eid, int id, char* got, int size);
 sgx_status_t get_pubkey(sgx_enclave_id_t eid, char** retval, int id);
 sgx_status_t get_privkey(sgx_enclave_id_t eid, char** retval, int id);
-sgx_status_t rsa_encrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg);
-sgx_status_t rsa_decrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg);
+sgx_status_t rsa_encrypt(sgx_enclave_id_t eid, unsigned char** retval, int id, char* msg);
+sgx_status_t rsa_get_key_size(sgx_enclave_id_t eid, int* retval, int id);
+sgx_status_t rsa_decrypt(sgx_enclave_id_t eid, unsigned char** retval, int id, unsigned char* msg);
 sgx_status_t aes_encrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg, int len);
+sgx_status_t aes_decrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg, int len);
 sgx_status_t startup(sgx_enclave_id_t eid);
 
 #ifdef __cplusplus

@@ -55,9 +55,10 @@ public class rsa {
 	public static void main(String [] args) throws Exception {
 		// generate public and private keys
 		KeyPair keyPair = buildKeyPair();
-		KeyPair keyPair2 = buildKeyPair();
 		PublicKey pubKey = keyPair.getPublic();
 		PrivateKey privateKey = keyPair.getPrivate();
+
+
 		// sign the message
 		byte [] signed = encrypt(privateKey, "This is a secret message");     
 		//System.out.println(new String(signed));  // <<signed message>>

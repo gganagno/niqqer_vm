@@ -15,22 +15,34 @@ final class JDK_javax_crypto_Cipher {
 
 	@SUBSTITUTE
 	public void init(int opmode,Key key) {
-
 		System.loadLibrary("hello");
-		System.out.println("java: Cipher_init algo: " + key.getAlgorithm());
-		if (key.getAlgorithm().equals("AES")) {
-			jni_cipher_helper n = new jni_cipher_helper();
-			System.out.println("java: Cipher_init: " + n.SGX_Cipher_init());
-		}
+
+		jni_cipher_helper n = new jni_cipher_helper();
+		custom_info p = JDK_java_security_KeyPair.myhash.get(key);
+		p.type = opmode;
+		if (key.getAlgorithm().equals("AES"))
+			p.algo = 0;
+		else 
+			p.algo = 1;	
+		JDK_java_security_KeyPair.myhash.put((Object)this, p);
+		
 	}
 	/* Used for RSA*/
 	@SUBSTITUTE
 	public byte[] doFinal(byte[] b) {                                            
-		int id = 0; 	
-		System.loadLibrary("hello");                                              	
-		jni_cipher_helper n = new jni_cipher_helper();                            	
-		System.out.println("java: Cipher_dofinal: " + n.SGX_Cipher_dofinal_xd(id, b));	
-		return new byte[10];                                                      	
+		int id = 0; 
+		custom_info c = new custom_info();
+		System.loadLibrary("hello");              
+                                	
+		c = JDK_java_security_KeyPair.myhash.get((Object)this);
+		id = c.id;
+	
+		jni_cipher_helper n = new jni_cipher_helper();                           
+		//String n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);	
+		byte[] n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);	
+		System.out.println("@@" +  n1);
+		System.out.println("@@" +  n1.toString());
+		return n1;
 	}                                                                           
 	//    }
 	//
@@ -69,6 +81,6 @@ class jni_cipher_helper {
 	public native char SGX_Cipher_update();
 
 	public native char SGX_Cipher_dofinal();
-	public native char SGX_Cipher_dofinal_xd(int id, byte[] b);
+	public native byte[] SGX_Cipher_dofinal_xd(int id, byte[] b, int type, int algo);
 
 }

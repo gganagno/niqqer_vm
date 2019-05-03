@@ -32,15 +32,20 @@ typedef struct ms_get_privkey_t {
 } ms_get_privkey_t;
 
 typedef struct ms_rsa_encrypt_t {
-	char* ms_retval;
+	unsigned char* ms_retval;
 	int ms_id;
 	char* ms_msg;
 } ms_rsa_encrypt_t;
 
-typedef struct ms_rsa_decrypt_t {
-	char* ms_retval;
+typedef struct ms_rsa_get_key_size_t {
+	int ms_retval;
 	int ms_id;
-	char* ms_msg;
+} ms_rsa_get_key_size_t;
+
+typedef struct ms_rsa_decrypt_t {
+	unsigned char* ms_retval;
+	int ms_id;
+	unsigned char* ms_msg;
 } ms_rsa_decrypt_t;
 
 typedef struct ms_aes_encrypt_t {
@@ -49,6 +54,13 @@ typedef struct ms_aes_encrypt_t {
 	char* ms_msg;
 	int ms_len;
 } ms_aes_encrypt_t;
+
+typedef struct ms_aes_decrypt_t {
+	char* ms_retval;
+	int ms_id;
+	char* ms_msg;
+	int ms_len;
+} ms_aes_decrypt_t;
 
 typedef struct ms_uprint_t {
 	const char* ms_str;
@@ -271,7 +283,7 @@ sgx_status_t get_privkey(sgx_enclave_id_t eid, char** retval, int id)
 	return status;
 }
 
-sgx_status_t rsa_encrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg)
+sgx_status_t rsa_encrypt(sgx_enclave_id_t eid, unsigned char** retval, int id, char* msg)
 {
 	sgx_status_t status;
 	ms_rsa_encrypt_t ms;
@@ -282,13 +294,23 @@ sgx_status_t rsa_encrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg)
 	return status;
 }
 
-sgx_status_t rsa_decrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg)
+sgx_status_t rsa_get_key_size(sgx_enclave_id_t eid, int* retval, int id)
+{
+	sgx_status_t status;
+	ms_rsa_get_key_size_t ms;
+	ms.ms_id = id;
+	status = sgx_ecall(eid, 7, &ocall_table_TestEnclave, &ms);
+	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
+	return status;
+}
+
+sgx_status_t rsa_decrypt(sgx_enclave_id_t eid, unsigned char** retval, int id, unsigned char* msg)
 {
 	sgx_status_t status;
 	ms_rsa_decrypt_t ms;
 	ms.ms_id = id;
 	ms.ms_msg = msg;
-	status = sgx_ecall(eid, 7, &ocall_table_TestEnclave, &ms);
+	status = sgx_ecall(eid, 8, &ocall_table_TestEnclave, &ms);
 	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
 	return status;
 }
@@ -300,7 +322,19 @@ sgx_status_t aes_encrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg,
 	ms.ms_id = id;
 	ms.ms_msg = msg;
 	ms.ms_len = len;
-	status = sgx_ecall(eid, 8, &ocall_table_TestEnclave, &ms);
+	status = sgx_ecall(eid, 9, &ocall_table_TestEnclave, &ms);
+	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
+	return status;
+}
+
+sgx_status_t aes_decrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg, int len)
+{
+	sgx_status_t status;
+	ms_aes_decrypt_t ms;
+	ms.ms_id = id;
+	ms.ms_msg = msg;
+	ms.ms_len = len;
+	status = sgx_ecall(eid, 10, &ocall_table_TestEnclave, &ms);
 	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
 	return status;
 }
@@ -308,7 +342,7 @@ sgx_status_t aes_encrypt(sgx_enclave_id_t eid, char** retval, int id, char* msg,
 sgx_status_t startup(sgx_enclave_id_t eid)
 {
 	sgx_status_t status;
-	status = sgx_ecall(eid, 9, &ocall_table_TestEnclave, NULL);
+	status = sgx_ecall(eid, 11, &ocall_table_TestEnclave, NULL);
 	return status;
 }
 

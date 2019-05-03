@@ -141,19 +141,26 @@ extern "C" {
 
 
 
-	char *
-		wrapper_rsa_decrypt(int id, char *string)
+	unsigned char *
+		wrapper_rsa_decrypt(int id, unsigned char *string)
 		{
-			char *plain;
+			unsigned char *plain;
 			rsa_decrypt(eid, &plain, id, string);
 			return plain;
 		}
 
-
-	char *
+	int
+	wrapper_rsa_get_key_size(int id)
+	{
+		int res;
+		rsa_get_key_size(eid, &res, id);
+		printf("RES = %d\n", res);
+		return res;
+	}
+	unsigned char *
 		wrapper_rsa_encrypt(int id, char *string)
 		{
-			char *encrypted;
+			unsigned char *encrypted;
 			rsa_encrypt(eid, &encrypted, id, string);
 			return encrypted;
 		}
@@ -164,6 +171,13 @@ extern "C" {
 			char *encrypted;
 			aes_encrypt(eid, &encrypted, id, string, len);
 			return encrypted;
+		}
+	char *
+		wrapper_aes_decrypt(int id, char *string, int len)
+		{
+			char *decrypted;
+			aes_decrypt(eid, &decrypted, id, string, len);
+			return decrypted;
 		}
 
 
