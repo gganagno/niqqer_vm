@@ -313,7 +313,14 @@ extern "C" {
 		printf("usgx_exit: %d\n", reason);
 		exit(reason);
 	}
-
+	
+	int 
+	wrapper_aes_getbytes(int id)
+	{
+		int b;
+		aes_getbytes(eid, &b, id);
+		return b;
+	}
 
 
 }

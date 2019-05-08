@@ -62,6 +62,7 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (cons
 #endif
 
 sgx_status_t generate_keypair(sgx_enclave_id_t eid, int* retval, int size);
+sgx_status_t aes_getbytes(sgx_enclave_id_t eid, int* retval, int id);
 sgx_status_t print_key(sgx_enclave_id_t eid, int id);
 sgx_status_t keygen(sgx_enclave_id_t eid, int* retval, int size);
 sgx_status_t get_key(sgx_enclave_id_t eid, int id, char* got, int size);

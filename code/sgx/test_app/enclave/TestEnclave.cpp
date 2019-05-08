@@ -23,6 +23,7 @@
 
 
 
+
 struct rsa_key_t{
 	RSA *keypair;
 	char *pubkey;
@@ -40,7 +41,8 @@ struct key_array_t {
 	short size;
 	short type;
 	union key_type {
-		unsigned char *key;
+		struct aes_key_t key;// char *key;
+        
 		struct rsa_key_t rk;
 	}kt;
 
@@ -62,44 +64,119 @@ strdup (char *s)
 
 void
 print_key(int id){
-	print_data((char *)key_array[id].kt.key, key_array[id].size);
+	print_data((char *)key_array[id].kt.key.key, key_array[id].size);
 }
 
 	void
 get_key(int id, char *got, int size)
 {
 
-	memcpy(got, key_array[id].kt.key, size);
+	memcpy(got, key_array[id].kt.key.key, size);
 	//got = key_array[id];
 }
 
 
 	char *
-aes_encrypt(int id, char *text, int len) 
+aes_encrypt(int id, char *plaintext, int plaintext_len) 
 {
 	int size = key_array[id].size;	
-	unsigned char *out =  (unsigned char *)calloc(size, sizeof(unsigned char));
-	unsigned char *out2 = (unsigned char *)calloc(size, sizeof(unsigned char));
-	AES_KEY enc_key, dec_key;
-	AES_set_encrypt_key(key_array[id].kt.key, size * 8, &enc_key);
-	AES_encrypt((unsigned char *)text, out, &enc_key);
-	AES_set_decrypt_key(key_array[id].kt.key, size * 8, &dec_key);
-	AES_decrypt(out, out2, &dec_key);
-	return (char *)out2;
+    EVP_CIPHER_CTX *ctx;
+    unsigned char *iv = NULL;
+    unsigned char *ciphertext = (unsigned char *)calloc(plaintext_len, sizeof(unsigned char));
+    int len;
+
+    unsigned char *key = key_array[id].kt.key.key;
+    int ciphertext_len;
+
+    /* Create and initialise the context */
+    ctx = EVP_CIPHER_CTX_new();
+
+    /*
+     * Initialise the encryption operation. IMPORTANT - ensure you use a key
+     * and IV size appropriate for your cipher
+     * In this example we are using 256 bit AES (i.e. a 256 bit key). The
+     * IV size for *most* modes is the same as the block size. For AES this
+     * is 128 bits
+     */
+    EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv);
+
+    /*
+     * Provide the message to be encrypted, and obtain the encrypted output.
+     * EVP_EncryptUpdate can be called multiple times if necessary
+     */
+    EVP_EncryptUpdate(ctx, ciphertext, &len, (unsigned char *)plaintext, plaintext_len);
+    ciphertext_len = len;
+
+    /*
+     * Finalise the encryption. Further ciphertext bytes may be written at
+     * this stage.
+     */
+    EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+    ciphertext_len += len;
+    printf("%.*s\n\n\n", ciphertext_len, (char *)ciphertext);
+    key_array[id].kt.key.enc_len = ciphertext_len;
+    //char *x = aes_decrypt(id, (char *)ciphertext, ciphertext_len);
+    //printf("-----\n\n%s\n\n", x);
+    //abort();
+	printf("---------\n\n\n %d\n\n\n\n", ciphertext_len);
+    return (char *)ciphertext;
+
 }
 
 char *
-aes_decrypt(int id, char *text, int len) 
+aes_decrypt(int id, char *ciphertext, int ciphertext_len) 
 {
-	int size = key_array[id].size;	
-	unsigned char *out =  (unsigned char *)calloc(size, sizeof(unsigned char));
-	unsigned char *out2 = (unsigned char *)calloc(size, sizeof(unsigned char));
-	AES_KEY enc_key, dec_key;
-	AES_set_encrypt_key(key_array[id].kt.key, size * 8, &enc_key);
-	AES_encrypt((unsigned char *)text, out, &enc_key);
-	AES_set_decrypt_key(key_array[id].kt.key, size * 8, &dec_key);
-	AES_decrypt(out, out2, &dec_key);
-	return (char *)out2;
+
+    ciphertext_len = key_array[id].kt.key.enc_len;
+    printf("%.*s\n\n\n", ciphertext_len, (char *)ciphertext);
+    unsigned char *key = key_array[id].kt.key.key;
+    unsigned char *iv = NULL;
+    
+    unsigned char *plaintext = (unsigned char *)calloc(ciphertext_len, sizeof(unsigned char));
+    int len;
+
+
+    EVP_CIPHER_CTX *ctx;
+    int plaintext_len;
+
+    /* Create and initialise the context */
+    ctx = EVP_CIPHER_CTX_new();
+
+    /*
+     * Initialise the decryption operation. IMPORTANT - ensure you use a key
+     * and IV size appropriate for your cipher
+     * In this example we are using 256 bit AES (i.e. a 256 bit key). The
+     * IV size for *most* modes is the same as the block size. For AES this
+     * is 128 bits
+     */
+    EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv);
+
+    /*
+     * Provide the message to be decrypted, and obtain the plaintext output.
+     * EVP_DecryptUpdate can be called multiple times if necessary.
+     */
+    EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char *)ciphertext, ciphertext_len);
+    plaintext_len = len;
+
+    /*
+     * Finalise the decryption. Further plaintext bytes may be written at
+     * this stage.
+     */
+    EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
+    plaintext_len += len;
+
+    /* Clean up */
+    EVP_CIPHER_CTX_free(ctx);
+    plaintext[plaintext_len]='\0';
+
+
+
+
+
+
+
+
+	return (char *)plaintext;
 }
 
 
@@ -108,11 +185,12 @@ aes_decrypt(int id, char *text, int len)
 int
 keygen(int size){
 	int i;
-	key_array[active_ids].kt.key = (unsigned char *)malloc(size * sizeof(unsigned char));
+	key_array[active_ids].kt.key.key = (unsigned char *)malloc(size * sizeof(unsigned char));
 	key_array[active_ids].size = size;
-	RAND_bytes(key_array[active_ids].kt.key, size);
-	key_array[active_ids].kt.key[size -1] = '\0';
-	print_data((char *)key_array[active_ids].kt.key, size);
+	RAND_bytes(key_array[active_ids].kt.key.key, size);
+	key_array[active_ids].kt.key.key[size -1] = '\0';
+    
+	print_data((char *)key_array[active_ids].kt.key.key, size);
 	return active_ids++;
 }
 
@@ -299,7 +377,7 @@ startup()
 
 }
 
-	int
+int
 generate_keypair(int size)
 {
 	int id;
@@ -307,4 +385,8 @@ generate_keypair(int size)
 	return id;
 }
 
-
+int
+aes_getbytes(int id)
+{
+    return key_array[id].kt.key.enc_len;
+}

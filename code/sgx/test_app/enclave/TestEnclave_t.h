@@ -16,6 +16,7 @@ extern "C" {
 #endif
 
 int generate_keypair(int size);
+int aes_getbytes(int id);
 void print_key(int id);
 int keygen(int size);
 void get_key(int id, char* got, int size);

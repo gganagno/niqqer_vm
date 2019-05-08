@@ -15,16 +15,18 @@ final class JDK_javax_crypto_Cipher {
 
 	@SUBSTITUTE
 	public void init(int opmode, Key key) {
+		Key key2 = key;
 		System.loadLibrary("hello");
 
 		jni_cipher_helper n = new jni_cipher_helper();
 		custom_info p = JDK_java_security_KeyPair.myhash.get(key);
+		System.out.println("Changing opmode " + opmode);
 		p.type = opmode;
 		if (key.getAlgorithm().equals("AES"))
 			p.algo = 0;
 		else 
 			p.algo = 1;	
-		JDK_java_security_KeyPair.myhash.put((Object)this, p);
+		JDK_java_security_KeyPair.myhash.put(this, p);
 
 	}
 	/* Used for RSA*/

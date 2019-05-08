@@ -1,49 +1,150 @@
-#include <openssl/rsa.h>
-#include <openssl/pem.h>
+#include <openssl/conf.h>
+#include <openssl/evp.h>
 #include <openssl/err.h>
-#include <openssl/aes.h>
-#include <stdio.h>
 #include <string.h>
 
-#define KEY_LENGTH  2048
-#define PUB_EXP     3
-#define PRINT_KEYS
+void handleErrors(void);
+int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
+            unsigned char *iv, unsigned char *ciphertext);
+int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
+            unsigned char *iv, unsigned char *plaintext);
 
-
-
-static const unsigned char key[] = {
-    0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
-    0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-    0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
-};
-
-int main()
+int main (void)
 {
-    unsigned char text[]="hello world!";
-    unsigned char enc_out[80];
-    unsigned char dec_out[80];
+    /*
+     * Set up the key and iv. Do I need to say to not hard code these in a
+     * real application? :-)
+     */
 
-    AES_KEY enc_key, dec_key;
+    /* A 256 bit key */
+    unsigned char *key = (unsigned char *)"01234567890123456789012345678901";
 
-    AES_set_encrypt_key(key, 128, &enc_key);
-    AES_encrypt(text, enc_out, &enc_key);      
+    /* A 128 bit IV */
+    unsigned char *iv = (unsigned char *)"0123456789012345";
 
-    AES_set_decrypt_key(key,128,&dec_key);
-    AES_decrypt(enc_out, dec_out, &dec_key);
+    /* Message to be encrypted */
+    unsigned char *plaintext =
+        (unsigned char *)"The quick brown fox jumps over the lazy dog";
 
-    int i;
+    unsigned char ciphertext[128];
 
-    printf("original:\t");
-    for(i=0;*(text+i)!=0x00;i++)
-        printf("%X ",*(text+i));
-    printf("\nencrypted:\t");
-    for(i=0;*(enc_out+i)!=0x00;i++)
-        printf("%X ",*(enc_out+i));
-    printf("\ndecrypted:\t");
-    for(i=0;*(dec_out+i)!=0x00;i++)
-        printf("%X ",*(dec_out+i));
-    printf("\n");
+    /* Buffer for the decrypted text */
+    unsigned char decryptedtext[128];
 
+    int decryptedtext_len, ciphertext_len;
+
+    /* Encrypt the plaintext */
+    ciphertext_len = encrypt (plaintext, strlen ((char *)plaintext), key, iv,
+                              ciphertext);
+
+    /* Do something useful with the ciphertext here */
+    printf("Ciphertext is:\n");
+    /* Decrypt the ciphertext */
+    decryptedtext_len = decrypt(ciphertext, ciphertext_len, key, iv,
+                                decryptedtext);
+
+    /* Add a NULL terminator. We are expecting printable text */
+    decryptedtext[decryptedtext_len] = '\0';
+    /* Show the decrypted text */
+    printf("Decrypted text is:\n");
+    printf("%s\n", decryptedtext);
     return 0;
-} 
+}
+
+
+void handleErrors(void)
+{
+    ERR_print_errors_fp(stderr);
+    abort();
+}
+
+int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
+            unsigned char *iv, unsigned char *ciphertext)
+{
+    EVP_CIPHER_CTX *ctx;
+
+    int len;
+
+    int ciphertext_len;
+
+    /* Create and initialise the context */
+    if(!(ctx = EVP_CIPHER_CTX_new()))
+        handleErrors();
+
+    /*
+     * Initialise the encryption operation. IMPORTANT - ensure you use a key
+     * and IV size appropriate for your cipher
+     * In this example we are using 256 bit AES (i.e. a 256 bit key). The
+     * IV size for *most* modes is the same as the block size. For AES this
+     * is 128 bits
+     */
+    if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv))
+        handleErrors();
+
+    /*
+     * Provide the message to be encrypted, and obtain the encrypted output.
+     * EVP_EncryptUpdate can be called multiple times if necessary
+     */
+    if(1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len))
+        handleErrors();
+    ciphertext_len = len;
+
+    /*
+     * Finalise the encryption. Further ciphertext bytes may be written at
+     * this stage.
+     */
+    if(1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len))
+        handleErrors();
+    ciphertext_len += len;
+
+    /* Clean up */
+    EVP_CIPHER_CTX_free(ctx);
+
+    return ciphertext_len;
+}
+
+
+int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
+            unsigned char *iv, unsigned char *plaintext)
+{
+    EVP_CIPHER_CTX *ctx;
+
+    int len;
+
+    int plaintext_len;
+
+    /* Create and initialise the context */
+    if(!(ctx = EVP_CIPHER_CTX_new()))
+        handleErrors();
+
+    /*
+     * Initialise the decryption operation. IMPORTANT - ensure you use a key
+     * and IV size appropriate for your cipher
+     * In this example we are using 256 bit AES (i.e. a 256 bit key). The
+     * IV size for *most* modes is the same as the block size. For AES this
+     * is 128 bits
+     */
+    if(1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv))
+        handleErrors();
+
+    /*
+     * Provide the message to be decrypted, and obtain the plaintext output.
+     * EVP_DecryptUpdate can be called multiple times if necessary.
+     */
+    if(1 != EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, ciphertext_len))
+        handleErrors();
+    plaintext_len = len;
+
+    /*
+     * Finalise the decryption. Further plaintext bytes may be written at
+     * this stage.
+     */
+    if(1 != EVP_DecryptFinal_ex(ctx, plaintext + len, &len))
+        handleErrors();
+    plaintext_len += len;
+
+    /* Clean up */
+    EVP_CIPHER_CTX_free(ctx);
+
+    return plaintext_len;
+}

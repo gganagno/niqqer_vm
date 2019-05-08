@@ -32,6 +32,11 @@ typedef struct ms_generate_keypair_t {
 	int ms_size;
 } ms_generate_keypair_t;
 
+typedef struct ms_aes_getbytes_t {
+	int ms_retval;
+	int ms_id;
+} ms_aes_getbytes_t;
+
 typedef struct ms_print_key_t {
 	int ms_id;
 } ms_print_key_t;
@@ -155,6 +160,24 @@ static sgx_status_t SGX_CDECL sgx_generate_keypair(void* pms)
 
 
 	ms->ms_retval = generate_keypair(ms->ms_size);
+
+
+	return status;
+}
+
+static sgx_status_t SGX_CDECL sgx_aes_getbytes(void* pms)
+{
+	CHECK_REF_POINTER(pms, sizeof(ms_aes_getbytes_t));
+	//
+	// fence after pointer checks
+	//
+	sgx_lfence();
+	ms_aes_getbytes_t* ms = SGX_CAST(ms_aes_getbytes_t*, pms);
+	sgx_status_t status = SGX_SUCCESS;
+
+
+
+	ms->ms_retval = aes_getbytes(ms->ms_id);
 
 
 	return status;
@@ -355,11 +378,12 @@ static sgx_status_t SGX_CDECL sgx_startup(void* pms)
 
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[12];
+	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[13];
 } g_ecall_table = {
-	12,
+	13,
 	{
 		{(void*)(uintptr_t)sgx_generate_keypair, 0},
+		{(void*)(uintptr_t)sgx_aes_getbytes, 0},
 		{(void*)(uintptr_t)sgx_print_key, 0},
 		{(void*)(uintptr_t)sgx_keygen, 0},
 		{(void*)(uintptr_t)sgx_get_key, 0},
@@ -376,21 +400,21 @@ SGX_EXTERNC const struct {
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[11][12];
+	uint8_t entry_table[11][13];
 } g_dyn_entry_table = {
 	11,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 
