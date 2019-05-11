@@ -24,6 +24,9 @@
 
 
 extern "C" {
+
+	int wrapper_rsa_get_key_size(int id);
+
 	static int init = 0;
 	sgx_enclave_id_t eid = 0;
 	void
@@ -73,6 +76,7 @@ extern "C" {
 				/* create the enclave */
 				debug_print("Creating Enclave\n");
 				sprintf(buffer, "%s/com.oracle.max.vm.native/generated/linux/libenclave.signed.so", s);
+				// strcpy(buffer, "./libenclave.signed.so");
 
 				ret = sgx_create_enclave(buffer, SGX_DEBUG_FLAG, &token,
 						&updated, &eid, NULL);
@@ -113,16 +117,16 @@ extern "C" {
 	char *
 		wrapper_rsa_get_pubkey(int id)
 		{
-			char *key = NULL;
-			get_pubkey(eid, &key, id);
-			return strdup(key);
+			char *key = (char *)calloc(4000, 1);
+			get_pubkey(eid, id, key);
+			return key;
 		}
 	char *
 		wrapper_rsa_get_privkey(int id)
 		{
-			char *key = NULL;
-			get_privkey(eid, &key, id);
-			return strdup(key);
+			char *key = (char *)calloc(4000, 1);
+			get_privkey(eid, id, key);
+			return key;
 		}
 
 	void
@@ -144,39 +148,59 @@ extern "C" {
 	unsigned char *
 		wrapper_rsa_decrypt(int id, unsigned char *string)
 		{
-			unsigned char *plain;
-			rsa_decrypt(eid, &plain, id, string);
+			unsigned char *plain = (unsigned char *)calloc(wrapper_rsa_get_key_size(id), 1);
+			// rsa = output = size(kleidiou) wrapper_get_key_size
+			// 
+			rsa_decrypt(eid, id, string, plain);
+            printf("Plain %s\n", (char *)plain);
 			return plain;
 		}
 
-	int
-	wrapper_rsa_get_key_size(int id)
-	{
-		int res;
-		rsa_get_key_size(eid, &res, id);
-		printf("RES = %d\n", res);
-		return res;
-	}
+
+
 	unsigned char *
-		wrapper_rsa_encrypt(int id, char *string)
+		wrapper_rsa_encrypt(int id, unsigned char *string)
 		{
-			unsigned char *encrypted;
-			rsa_encrypt(eid, &encrypted, id, string);
+
+			unsigned char *encrypted = (unsigned char *)calloc(wrapper_rsa_get_key_size(id), 1);
+			rsa_encrypt(eid, id, string, encrypted);
 			return encrypted;
 		}
 
-	char *
-		wrapper_aes_encrypt(int id, char *string, int len)
+
+	int
+		wrapper_rsa_get_key_size(int id)
 		{
-			char *encrypted;
-			aes_encrypt(eid, &encrypted, id, string, len);
+			int res;
+			rsa_get_key_size(eid, &res, id);
+			return res;
+		}
+
+	int 
+		wrapper_aes_getbytes(int id)
+		{
+			int b;
+			aes_getbytes(eid, &b, id);
+			return b;
+		}
+unsigned char *
+		wrapper_aes_decrypt(int id, unsigned char *string, int len);
+
+	    unsigned char *
+		wrapper_aes_encrypt(int id, unsigned char *string, int len)
+		{
+			unsigned char *encrypted = (unsigned char *)calloc(len, 1);
+			aes_encrypt(eid, id, string, len, encrypted);
+            
 			return encrypted;
 		}
-	char *
-		wrapper_aes_decrypt(int id, char *string, int len)
+	unsigned char *
+		wrapper_aes_decrypt(int id, unsigned char *string, int len)
 		{
-			char *decrypted;
-			aes_decrypt(eid, &decrypted, id, string, len);
+            
+			debug_print("Encrypted len b4 decryption: %d\n", len);
+			unsigned char *decrypted = (unsigned char *)calloc(len, 1);
+			aes_decrypt(eid,  id, string, len, decrypted);
 			return decrypted;
 		}
 
@@ -184,13 +208,12 @@ extern "C" {
 
 	/* debugging */
 	int main() {
-		int id;
-		wrapper_init_enclave();
-		id = wrapper_rsa_keygen(2048);
-		char *xd, *plain;
-		//printf("%s\n", (xd = wrapper_rsa_encrypt( id, "lala")));
-		//printf("%s\n", wrapper_rsa_decrypt( id, xd));
-		wrapper_rsa_get_pubkey(id);
+		//int id;
+		//wrapper_init_enclave();
+		//id = wrapper_keygen(16);
+		//unsigned char *xd;
+		//xd = wrapper_aes_encrypt( id, "xd",strlen("xd"));
+		//printf("\n|%s|\n", (char *)wrapper_aes_decrypt(id, xd, wrapper_aes_getbytes(id)));
 	}
 	typedef struct _sgx_errlist_t {
 		sgx_status_t err;
@@ -312,14 +335,6 @@ extern "C" {
 	{
 		printf("usgx_exit: %d\n", reason);
 		exit(reason);
-	}
-	
-	int 
-	wrapper_aes_getbytes(int id)
-	{
-		int b;
-		aes_getbytes(eid, &b, id);
-		return b;
 	}
 
 

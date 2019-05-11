@@ -1,11 +1,14 @@
 cd $WORKDIR
-cd mytests/jdk/
+cd niqqer_vm/jdk/
 cp JDK_javax* $MAXINE_HOME/com.sun.max/src/com/sun/max/vm/jdk
-cd ../sgx_keygen/
+cp JDK_java_s* $MAXINE_HOME/com.sun.max/src/com/sun/max/vm/jdk
+cd ../code/sgx/test_app
 make clean
 make
 cp *.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
-cd ../jni/
+
+echo $PWD
+cd $WORKDIR/niqqer_vm/tests/jni
 make clean
 javac JNI_*.java
 javah JNI_Cipher

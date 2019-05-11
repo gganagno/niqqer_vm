@@ -32,7 +32,7 @@
 
 
 ######## SGX SDK Settings ########
-SGX_MODE ?= SIM
+SGX_MODE ?= HW
 SGX_ARCH ?= x64
 UNTRUSTED_DIR=app
 

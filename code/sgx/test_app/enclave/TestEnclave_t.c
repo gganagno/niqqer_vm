@@ -22,10 +22,6 @@
 		return SGX_ERROR_INVALID_PARAMETER;\
 } while (0)
 
-#define ADD_ASSIGN_OVERFLOW(a, b) (	\
-	((a) += (b)) < (b)	\
-)
-
 
 typedef struct ms_generate_keypair_t {
 	int ms_retval;
@@ -53,44 +49,44 @@ typedef struct ms_get_key_t {
 } ms_get_key_t;
 
 typedef struct ms_get_pubkey_t {
-	char* ms_retval;
 	int ms_id;
+	char* ms_r;
 } ms_get_pubkey_t;
 
 typedef struct ms_get_privkey_t {
-	char* ms_retval;
 	int ms_id;
+	char* ms_r;
 } ms_get_privkey_t;
 
 typedef struct ms_rsa_encrypt_t {
-	unsigned char* ms_retval;
 	int ms_id;
-	char* ms_msg;
+	unsigned char* ms_msg;
+	unsigned char* ms_r;
 } ms_rsa_encrypt_t;
+
+typedef struct ms_rsa_decrypt_t {
+	int ms_id;
+	unsigned char* ms_msg;
+	unsigned char* ms_r;
+} ms_rsa_decrypt_t;
 
 typedef struct ms_rsa_get_key_size_t {
 	int ms_retval;
 	int ms_id;
 } ms_rsa_get_key_size_t;
 
-typedef struct ms_rsa_decrypt_t {
-	unsigned char* ms_retval;
+typedef struct ms_aes_encrypt_t {
 	int ms_id;
 	unsigned char* ms_msg;
-} ms_rsa_decrypt_t;
-
-typedef struct ms_aes_encrypt_t {
-	char* ms_retval;
-	int ms_id;
-	char* ms_msg;
 	int ms_len;
+	unsigned char* ms_result;
 } ms_aes_encrypt_t;
 
 typedef struct ms_aes_decrypt_t {
-	char* ms_retval;
 	int ms_id;
-	char* ms_msg;
+	unsigned char* ms_msg;
 	int ms_len;
+	unsigned char* ms_result;
 } ms_aes_decrypt_t;
 
 typedef struct ms_uprint_t {
@@ -247,10 +243,11 @@ static sgx_status_t SGX_CDECL sgx_get_pubkey(void* pms)
 	sgx_lfence();
 	ms_get_pubkey_t* ms = SGX_CAST(ms_get_pubkey_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
+	char* _tmp_r = ms->ms_r;
 
 
 
-	ms->ms_retval = get_pubkey(ms->ms_id);
+	get_pubkey(ms->ms_id, _tmp_r);
 
 
 	return status;
@@ -265,10 +262,11 @@ static sgx_status_t SGX_CDECL sgx_get_privkey(void* pms)
 	sgx_lfence();
 	ms_get_privkey_t* ms = SGX_CAST(ms_get_privkey_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
+	char* _tmp_r = ms->ms_r;
 
 
 
-	ms->ms_retval = get_privkey(ms->ms_id);
+	get_privkey(ms->ms_id, _tmp_r);
 
 
 	return status;
@@ -283,11 +281,32 @@ static sgx_status_t SGX_CDECL sgx_rsa_encrypt(void* pms)
 	sgx_lfence();
 	ms_rsa_encrypt_t* ms = SGX_CAST(ms_rsa_encrypt_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-	char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_r = ms->ms_r;
 
 
 
-	ms->ms_retval = rsa_encrypt(ms->ms_id, _tmp_msg);
+	rsa_encrypt(ms->ms_id, _tmp_msg, _tmp_r);
+
+
+	return status;
+}
+
+static sgx_status_t SGX_CDECL sgx_rsa_decrypt(void* pms)
+{
+	CHECK_REF_POINTER(pms, sizeof(ms_rsa_decrypt_t));
+	//
+	// fence after pointer checks
+	//
+	sgx_lfence();
+	ms_rsa_decrypt_t* ms = SGX_CAST(ms_rsa_decrypt_t*, pms);
+	sgx_status_t status = SGX_SUCCESS;
+	unsigned char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_r = ms->ms_r;
+
+
+
+	rsa_decrypt(ms->ms_id, _tmp_msg, _tmp_r);
 
 
 	return status;
@@ -311,25 +330,6 @@ static sgx_status_t SGX_CDECL sgx_rsa_get_key_size(void* pms)
 	return status;
 }
 
-static sgx_status_t SGX_CDECL sgx_rsa_decrypt(void* pms)
-{
-	CHECK_REF_POINTER(pms, sizeof(ms_rsa_decrypt_t));
-	//
-	// fence after pointer checks
-	//
-	sgx_lfence();
-	ms_rsa_decrypt_t* ms = SGX_CAST(ms_rsa_decrypt_t*, pms);
-	sgx_status_t status = SGX_SUCCESS;
-	unsigned char* _tmp_msg = ms->ms_msg;
-
-
-
-	ms->ms_retval = rsa_decrypt(ms->ms_id, _tmp_msg);
-
-
-	return status;
-}
-
 static sgx_status_t SGX_CDECL sgx_aes_encrypt(void* pms)
 {
 	CHECK_REF_POINTER(pms, sizeof(ms_aes_encrypt_t));
@@ -339,11 +339,12 @@ static sgx_status_t SGX_CDECL sgx_aes_encrypt(void* pms)
 	sgx_lfence();
 	ms_aes_encrypt_t* ms = SGX_CAST(ms_aes_encrypt_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-	char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_result = ms->ms_result;
 
 
 
-	ms->ms_retval = aes_encrypt(ms->ms_id, _tmp_msg, ms->ms_len);
+	aes_encrypt(ms->ms_id, _tmp_msg, ms->ms_len, _tmp_result);
 
 
 	return status;
@@ -358,11 +359,12 @@ static sgx_status_t SGX_CDECL sgx_aes_decrypt(void* pms)
 	sgx_lfence();
 	ms_aes_decrypt_t* ms = SGX_CAST(ms_aes_decrypt_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-	char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_msg = ms->ms_msg;
+	unsigned char* _tmp_result = ms->ms_result;
 
 
 
-	ms->ms_retval = aes_decrypt(ms->ms_id, _tmp_msg, ms->ms_len);
+	aes_decrypt(ms->ms_id, _tmp_msg, ms->ms_len, _tmp_result);
 
 
 	return status;
@@ -390,8 +392,8 @@ SGX_EXTERNC const struct {
 		{(void*)(uintptr_t)sgx_get_pubkey, 0},
 		{(void*)(uintptr_t)sgx_get_privkey, 0},
 		{(void*)(uintptr_t)sgx_rsa_encrypt, 0},
-		{(void*)(uintptr_t)sgx_rsa_get_key_size, 0},
 		{(void*)(uintptr_t)sgx_rsa_decrypt, 0},
+		{(void*)(uintptr_t)sgx_rsa_get_key_size, 0},
 		{(void*)(uintptr_t)sgx_aes_encrypt, 0},
 		{(void*)(uintptr_t)sgx_aes_decrypt, 0},
 		{(void*)(uintptr_t)sgx_startup, 0},
@@ -431,8 +433,7 @@ sgx_status_t SGX_CDECL uprint(const char* str)
 
 	CHECK_ENCLAVE_POINTER(str, _len_str);
 
-	if (ADD_ASSIGN_OVERFLOW(ocalloc_size, (str != NULL) ? _len_str : 0))
-		return SGX_ERROR_INVALID_PARAMETER;
+	ocalloc_size += (str != NULL) ? _len_str : 0;
 
 	__tmp = sgx_ocalloc(ocalloc_size);
 	if (__tmp == NULL) {
@@ -445,10 +446,6 @@ sgx_status_t SGX_CDECL uprint(const char* str)
 
 	if (str != NULL) {
 		ms->ms_str = (const char*)__tmp;
-		if (_len_str % sizeof(*str) != 0) {
-			sgx_ocfree();
-			return SGX_ERROR_INVALID_PARAMETER;
-		}
 		if (memcpy_s(__tmp, ocalloc_size, str, _len_str)) {
 			sgx_ocfree();
 			return SGX_ERROR_UNEXPECTED;
@@ -562,8 +559,7 @@ sgx_status_t SGX_CDECL ocall_print(char* value)
 
 	CHECK_ENCLAVE_POINTER(value, _len_value);
 
-	if (ADD_ASSIGN_OVERFLOW(ocalloc_size, (value != NULL) ? _len_value : 0))
-		return SGX_ERROR_INVALID_PARAMETER;
+	ocalloc_size += (value != NULL) ? _len_value : 0;
 
 	__tmp = sgx_ocalloc(ocalloc_size);
 	if (__tmp == NULL) {
@@ -577,10 +573,6 @@ sgx_status_t SGX_CDECL ocall_print(char* value)
 	if (value != NULL) {
 		ms->ms_value = (char*)__tmp;
 		__tmp_value = __tmp;
-		if (_len_value % sizeof(*value) != 0) {
-			sgx_ocfree();
-			return SGX_ERROR_INVALID_PARAMETER;
-		}
 		if (memcpy_s(__tmp_value, ocalloc_size, value, _len_value)) {
 			sgx_ocfree();
 			return SGX_ERROR_UNEXPECTED;
@@ -622,8 +614,7 @@ sgx_status_t SGX_CDECL u_sgxssl_ftime(void* timeptr, uint32_t timeb_len)
 
 	CHECK_ENCLAVE_POINTER(timeptr, _len_timeptr);
 
-	if (ADD_ASSIGN_OVERFLOW(ocalloc_size, (timeptr != NULL) ? _len_timeptr : 0))
-		return SGX_ERROR_INVALID_PARAMETER;
+	ocalloc_size += (timeptr != NULL) ? _len_timeptr : 0;
 
 	__tmp = sgx_ocalloc(ocalloc_size);
 	if (__tmp == NULL) {
@@ -672,8 +663,7 @@ sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf)
 
 	CHECK_ENCLAVE_POINTER(cpuinfo, _len_cpuinfo);
 
-	if (ADD_ASSIGN_OVERFLOW(ocalloc_size, (cpuinfo != NULL) ? _len_cpuinfo : 0))
-		return SGX_ERROR_INVALID_PARAMETER;
+	ocalloc_size += (cpuinfo != NULL) ? _len_cpuinfo : 0;
 
 	__tmp = sgx_ocalloc(ocalloc_size);
 	if (__tmp == NULL) {
@@ -687,10 +677,6 @@ sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf)
 	if (cpuinfo != NULL) {
 		ms->ms_cpuinfo = (int*)__tmp;
 		__tmp_cpuinfo = __tmp;
-		if (_len_cpuinfo % sizeof(*cpuinfo) != 0) {
-			sgx_ocfree();
-			return SGX_ERROR_INVALID_PARAMETER;
-		}
 		memset(__tmp_cpuinfo, 0, _len_cpuinfo);
 		__tmp = (void *)((size_t)__tmp + _len_cpuinfo);
 		ocalloc_size -= _len_cpuinfo;
@@ -811,8 +797,7 @@ sgx_status_t SGX_CDECL sgx_thread_set_multiple_untrusted_events_ocall(int* retva
 
 	CHECK_ENCLAVE_POINTER(waiters, _len_waiters);
 
-	if (ADD_ASSIGN_OVERFLOW(ocalloc_size, (waiters != NULL) ? _len_waiters : 0))
-		return SGX_ERROR_INVALID_PARAMETER;
+	ocalloc_size += (waiters != NULL) ? _len_waiters : 0;
 
 	__tmp = sgx_ocalloc(ocalloc_size);
 	if (__tmp == NULL) {
@@ -825,10 +810,6 @@ sgx_status_t SGX_CDECL sgx_thread_set_multiple_untrusted_events_ocall(int* retva
 
 	if (waiters != NULL) {
 		ms->ms_waiters = (const void**)__tmp;
-		if (_len_waiters % sizeof(*waiters) != 0) {
-			sgx_ocfree();
-			return SGX_ERROR_INVALID_PARAMETER;
-		}
 		if (memcpy_s(__tmp, ocalloc_size, waiters, _len_waiters)) {
 			sgx_ocfree();
 			return SGX_ERROR_UNEXPECTED;

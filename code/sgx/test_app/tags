@@ -5,8 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 ABORT	enclave/tests/ectest.c	99;"	d	file:
-ADD_ASSIGN_OVERFLOW	enclave/TestEnclave_t.c	25;"	d	file:
-App_C_Flags	sgx_u.mk	/^App_C_Flags := $(SGX_COMMON_CFLAGS) -fpic -fpie -fstack-protector -Wformat -Wformat-security -Wno-attributes $(App_Include_Paths) #-shared -fPIC$/;"	m
+App_C_Flags	sgx_u.mk	/^App_C_Flags := $(SGX_COMMON_CFLAGS) -fpic -fpie -fstack-protector -Wformat -Wformat-security -Wno-attributes $(App_Include_Paths) -shared -fPIC$/;"	m
 App_Cpp_Files	sgx_u.mk	/^App_Cpp_Files := $(UNTRUSTED_DIR)\/TestApp.cpp$/;"	m
 App_Cpp_Flags	sgx_u.mk	/^App_Cpp_Flags := $(App_C_Flags) -std=c++11$/;"	m
 App_Cpp_Objects	sgx_u.mk	/^App_Cpp_Objects := $(App_Cpp_Files:.cpp=.o)$/;"	m
@@ -130,7 +129,7 @@ LIST_SEPARATOR_CHAR	enclave/tests/e_os.h	440;"	d
 LL2HBITS	enclave/tests/bn_lcl.h	668;"	d
 LLBITS	enclave/tests/bn_lcl.h	666;"	d
 Lw	enclave/tests/bn_lcl.h	563;"	d
-MAX_PATH	app/TestApp.cpp	43;"	d	file:
+MAX_PATH	app/TestApp.cpp	11;"	d	file:
 MOD_EXP_CTIME_MIN_CACHE_LINE_MASK	enclave/tests/bn_lcl.h	401;"	d
 MOD_EXP_CTIME_MIN_CACHE_LINE_WIDTH	enclave/tests/bn_lcl.h	400;"	d
 MSDOS	enclave/tests/e_os.h	133;"	d
@@ -206,8 +205,8 @@ SGX_LIBRARY_PATH	sgx_t.mk	/^		SGX_LIBRARY_PATH := $(BUILD_DIR)$/;"	m
 SGX_LIBRARY_PATH	sgx_t.mk	/^		SGX_LIBRARY_PATH := $(SGX_SDK)\/lib64$/;"	m
 SGX_LIBRARY_PATH	sgx_u.mk	/^		SGX_LIBRARY_PATH := $(BUILD_DIR)$/;"	m
 SGX_LIBRARY_PATH	sgx_u.mk	/^		SGX_LIBRARY_PATH := $(SGX_SDK)\/lib64$/;"	m
-SGX_MODE	sgx_t.mk	/^SGX_MODE ?= SIM$/;"	m
-SGX_MODE	sgx_u.mk	/^SGX_MODE ?= SIM$/;"	m
+SGX_MODE	sgx_t.mk	/^SGX_MODE ?= HW$/;"	m
+SGX_MODE	sgx_u.mk	/^SGX_MODE ?= HW$/;"	m
 SGX_OC_CPUIDEX_DEFINED__	app/TestEnclave_u.h	44;"	d
 SGX_SDK_INC	sgx_t.mk	/^		SGX_SDK_INC := $(COMMON_DIR)\/inc$/;"	m
 SGX_SDK_INC	sgx_t.mk	/^		SGX_SDK_INC := $(SGX_SDK)\/include$/;"	m
@@ -280,10 +279,10 @@ WINDOWS	enclave/tests/e_os.h	130;"	d
 WIN_CONSOLE_BUG	enclave/tests/e_os.h	145;"	d
 W_OK	enclave/tests/e_os.h	338;"	d
 X_OK	enclave/tests/e_os.h	335;"	d
-Z	enclave/tests/dhtest.c	/^    const unsigned char *Z;$/;"	m	struct:__anon2	file:
-Z	enclave/tests/ecdhtest.c	/^    const char *Z;$/;"	m	struct:__anon4	file:
+Z	enclave/tests/dhtest.c	/^    const unsigned char *Z;$/;"	m	struct:__anon3	file:
+Z	enclave/tests/ecdhtest.c	/^    const char *Z;$/;"	m	struct:__anon2	file:
 ZIUT	enclave/tests/ecdhtest_cavs.h	/^    const char *ZIUT;$/;"	m	struct:__anon5
-Z_len	enclave/tests/dhtest.c	/^    size_t Z_len;$/;"	m	struct:__anon2	file:
+Z_len	enclave/tests/dhtest.c	/^    size_t Z_len;$/;"	m	struct:__anon3	file:
 _APP_H_	app/TestApp.h	33;"	d
 _O_BINARY	enclave/tests/e_os.h	216;"	d
 _O_BINARY	enclave/tests/e_os.h	327;"	d
@@ -299,7 +298,7 @@ _kbhit	enclave/tests/e_os.h	419;"	d
 _setmode	enclave/tests/e_os.h	214;"	d
 _setmode	enclave/tests/e_os.h	325;"	d
 _setmode	enclave/tests/e_os.h	418;"	d
-_sgx_errlist_t	app/TestApp.cpp	/^    typedef struct _sgx_errlist_t {$/;"	s	file:
+_sgx_errlist_t	app/TestApp.cpp	/^	typedef struct _sgx_errlist_t {$/;"	s	file:
 _strlen31	enclave/tests/e_os.h	/^static __inline unsigned int _strlen31(const char *str)$/;"	f
 a	enclave/tests/ectest.c	/^    const char *p, *a, *b, *Qx, *Qy, *Gx, *Gy, *order, *d;$/;"	m	struct:nistp_test_params	file:
 accept	enclave/tests/e_os.h	479;"	d
@@ -307,6 +306,13 @@ active_ids	enclave/TestEnclave.cpp	/^int active_ids = 0;$/;"	v
 addenum_1	enclave/tests/sha256t.c	/^static const unsigned char addenum_1[SHA224_DIGEST_LENGTH] = {$/;"	v	file:
 addenum_2	enclave/tests/sha256t.c	/^static const unsigned char addenum_2[SHA224_DIGEST_LENGTH] = {$/;"	v	file:
 addenum_3	enclave/tests/sha256t.c	/^static const unsigned char addenum_3[SHA224_DIGEST_LENGTH] = {$/;"	v	file:
+aes_decrypt	app/TestEnclave_u.c	/^sgx_status_t aes_decrypt(sgx_enclave_id_t eid, int id, unsigned char* msg, int len, char* r)$/;"	f
+aes_decrypt	enclave/TestEnclave.cpp	/^aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, char * result) $/;"	f
+aes_encrypt	app/TestEnclave_u.c	/^sgx_status_t aes_encrypt(sgx_enclave_id_t eid, unsigned char** retval, int id, char* msg, int len)$/;"	f
+aes_encrypt	enclave/TestEnclave.cpp	/^aes_encrypt(int id, char *plaintext, int plaintext_len)$/;"	f
+aes_getbytes	app/TestEnclave_u.c	/^sgx_status_t aes_getbytes(sgx_enclave_id_t eid, int* retval, int id)$/;"	f
+aes_getbytes	enclave/TestEnclave.cpp	/^aes_getbytes(int id)$/;"	f
+aes_key_t	enclave/TestEnclave.cpp	/^struct aes_key_t {$/;"	s	file:
 ameth	enclave/TestEnclave.cpp	/^    const EVP_PKEY_ASN1_METHOD *ameth;$/;"	m	struct:evp_pkey_st	file:
 app_b1	enclave/tests/sha256t.c	/^static const unsigned char app_b1[SHA256_DIGEST_LENGTH] = {$/;"	v	file:
 app_b2	enclave/tests/sha256t.c	/^static const unsigned char app_b2[SHA256_DIGEST_LENGTH] = {$/;"	v	file:
@@ -337,10 +343,10 @@ bn_test	enclave/tests/bntest.c	/^int bn_test()$/;"	f
 bn_wcheck_size	enclave/tests/bn_lcl.h	290;"	d
 bn_wcheck_size	enclave/tests/bn_lcl.h	304;"	d
 busy_wait	enclave/tests/threadstest.c	/^volatile int busy_wait = 0;$/;"	v
-cb	enclave/tests/bn_lcl.h	/^    } cb;$/;"	m	struct:bn_gencb_st	typeref:union:bn_gencb_st::__anon3
+cb	enclave/tests/bn_lcl.h	/^    } cb;$/;"	m	struct:bn_gencb_st	typeref:union:bn_gencb_st::__anon4
 cb	enclave/tests/dhtest.c	/^static int cb(int p, int n, BN_GENCB *arg)$/;"	f	file:
-cb_1	enclave/tests/bn_lcl.h	/^        void (*cb_1) (int, int, void *);$/;"	m	union:bn_gencb_st::__anon3
-cb_2	enclave/tests/bn_lcl.h	/^        int (*cb_2) (int, int, BN_GENCB *);$/;"	m	union:bn_gencb_st::__anon3
+cb_1	enclave/tests/bn_lcl.h	/^        void (*cb_1) (int, int, void *);$/;"	m	union:bn_gencb_st::__anon4
+cb_2	enclave/tests/bn_lcl.h	/^        int (*cb_2) (int, int, BN_GENCB *);$/;"	m	union:bn_gencb_st::__anon4
 change_rand	enclave/tests/ecdsatest.c	/^int change_rand(void)$/;"	f
 char2_field_tests	enclave/tests/ectest.c	/^static void char2_field_tests(void)$/;"	f	file:
 check_win_minplat	enclave/tests/e_os.h	352;"	d
@@ -364,9 +370,10 @@ closesocket	enclave/tests/e_os.h	201;"	d
 d	enclave/tests/bn_lcl.h	/^    BN_ULONG *d;                \/* Pointer to an array of 'BN_BITS2' bit$/;"	m	struct:bignum_st
 d	enclave/tests/ectest.c	/^    const char *p, *a, *b, *Qx, *Qy, *Gx, *Gy, *order, *d;$/;"	m	struct:nistp_test_params	file:
 dIUT	enclave/tests/ecdhtest_cavs.h	/^    const char *dIUT;$/;"	m	struct:__anon5
-da	enclave/tests/ecdhtest.c	/^    const char *da;$/;"	m	struct:__anon4	file:
-db	enclave/tests/ecdhtest.c	/^    const char *db;$/;"	m	struct:__anon4	file:
-debug_print	app/TestApp.cpp	53;"	d	file:
+da	enclave/tests/ecdhtest.c	/^    const char *da;$/;"	m	struct:__anon2	file:
+db	enclave/tests/ecdhtest.c	/^    const char *db;$/;"	m	struct:__anon2	file:
+debug_print	app/TestApp.cpp	21;"	d	file:
+decrypt	aes.c	/^int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,$/;"	f
 degree	enclave/tests/ectest.c	/^    int degree;$/;"	m	struct:nistp_test_params	file:
 destructor_run_count	enclave/tests/threadstest.c	/^static unsigned destructor_run_count = 0;$/;"	v	file:
 dh	enclave/TestEnclave.cpp	/^        struct dh_st *dh;       \/* DH *\/$/;"	m	union:evp_pkey_st::__anon9	typeref:struct:evp_pkey_st::__anon9::dh_st	file:
@@ -391,20 +398,23 @@ dmax	enclave/tests/bn_lcl.h	/^    int dmax;                   \/* Size of the d 
 dsa	enclave/TestEnclave.cpp	/^        struct dsa_st *dsa;     \/* DSA *\/$/;"	m	union:evp_pkey_st::__anon9	typeref:struct:evp_pkey_st::__anon9::dsa_st	file:
 ec	enclave/TestEnclave.cpp	/^        struct ec_key_st *ec;   \/* ECC *\/$/;"	m	union:evp_pkey_st::__anon9	typeref:struct:evp_pkey_st::__anon9::ec_key_st	file:
 ec_test	enclave/tests/ectest.c	/^int ec_test()$/;"	f
-ecall_addr	enclave/TestEnclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[5];$/;"	m	struct:__anon6::__anon7	file:
-ecall_table	enclave/TestEnclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[5];$/;"	m	struct:__anon6	typeref:struct:__anon6::__anon7	file:
+ecall_addr	enclave/TestEnclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[13];$/;"	m	struct:__anon6::__anon7	file:
+ecall_table	enclave/TestEnclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[13];$/;"	m	struct:__anon6	typeref:struct:__anon6::__anon7	file:
 ecdh_cavs_kat	enclave/tests/ecdhtest.c	/^static int ecdh_cavs_kat(BIO *out, const ecdh_cavs_kat_t *kat)$/;"	f	file:
 ecdh_cavs_kat_t	enclave/tests/ecdhtest_cavs.h	/^} ecdh_cavs_kat_t;$/;"	t	typeref:struct:__anon5
 ecdh_cavs_kats	enclave/tests/ecdhtest_cavs.h	/^static const ecdh_cavs_kat_t ecdh_cavs_kats[] = {$/;"	v
 ecdh_kat	enclave/tests/ecdhtest.c	/^static int ecdh_kat(BIO *out, const ecdh_kat_t *kat)$/;"	f	file:
-ecdh_kat_t	enclave/tests/ecdhtest.c	/^} ecdh_kat_t;$/;"	t	typeref:struct:__anon4	file:
+ecdh_kat_t	enclave/tests/ecdhtest.c	/^} ecdh_kat_t;$/;"	t	typeref:struct:__anon2	file:
 ecdh_kats	enclave/tests/ecdhtest.c	/^static const ecdh_kat_t ecdh_kats[] = {$/;"	v	file:
 ecdh_test	enclave/tests/ecdhtest.c	/^int ecdh_test()$/;"	f
 ecdsa_test	enclave/tests/ecdsatest.c	/^int ecdsa_test()$/;"	f
-eid	app/TestApp.cpp	/^sgx_enclave_id_t eid = 0;$/;"	v
+eid	app/TestApp.cpp	/^	sgx_enclave_id_t eid = 0;$/;"	v
+enc_len	enclave/TestEnclave.cpp	/^    int enc_len;$/;"	m	struct:aes_key_t	file:
+enc_len	enclave/TestEnclave.cpp	/^    short enc_len;$/;"	m	struct:rsa_key_t	file:
+encrypt	aes.c	/^int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,$/;"	f
 engine	enclave/TestEnclave.cpp	/^    ENGINE *engine;$/;"	m	struct:evp_pkey_st	file:
-entry_table	enclave/TestEnclave_t.c	/^	uint8_t entry_table[11][5];$/;"	m	struct:__anon8	file:
-err	app/TestApp.cpp	/^        sgx_status_t err;$/;"	m	struct:_sgx_errlist_t	file:
+entry_table	enclave/TestEnclave_t.c	/^	uint8_t entry_table[11][13];$/;"	m	struct:__anon8	file:
+err	app/TestApp.cpp	/^		sgx_status_t err;$/;"	m	struct:_sgx_errlist_t	file:
 evp_pkey_st	enclave/TestEnclave.cpp	/^struct evp_pkey_st {$/;"	s	file:
 exit	enclave/tests/missing_funcs.c	/^void exit(int status)$/;"	f
 fake_rand	enclave/tests/ecdsatest.c	/^static RAND_METHOD fake_rand;$/;"	v	file:
@@ -426,10 +436,10 @@ func	enclave/tests/threadstest.c	/^void (*func)(void) = NULL;$/;"	v
 g_dyn_entry_table	enclave/TestEnclave_t.c	/^} g_dyn_entry_table = {$/;"	v	typeref:struct:__anon8
 g_ecall_table	enclave/TestEnclave_t.c	/^} g_ecall_table = {$/;"	v	typeref:struct:__anon6
 generate_keypair	app/TestEnclave_u.c	/^sgx_status_t generate_keypair(sgx_enclave_id_t eid, int* retval, int size)$/;"	f
-generate_keypair	enclave/TestEnclave.cpp	/^int generate_keypair(int size)$/;"	f
+generate_keypair	enclave/TestEnclave.cpp	/^generate_keypair(int size)$/;"	f
 genprime_cb	enclave/tests/bntest.c	/^static int genprime_cb(int p, int n, BN_GENCB *arg)$/;"	f	file:
 get_key	app/TestEnclave_u.c	/^sgx_status_t get_key(sgx_enclave_id_t eid, int id, char* got, int size)$/;"	f
-get_key	enclave/TestEnclave.cpp	/^get_key(int id, char *got, int size){$/;"	f
+get_key	enclave/TestEnclave.cpp	/^get_key(int id, char *got, int size)$/;"	f
 get_last_socket_error	enclave/tests/e_os.h	153;"	d
 get_last_socket_error	enclave/tests/e_os.h	159;"	d
 get_last_socket_error	enclave/tests/e_os.h	165;"	d
@@ -439,25 +449,32 @@ get_last_socket_error	enclave/tests/e_os.h	192;"	d
 get_last_socket_error	enclave/tests/e_os.h	198;"	d
 get_last_sys_error	enclave/tests/e_os.h	142;"	d
 get_last_sys_error	enclave/tests/e_os.h	148;"	d
-get_param	enclave/tests/dhtest.c	/^    DH *(*get_param) (void);$/;"	m	struct:__anon2	file:
+get_param	enclave/tests/dhtest.c	/^    DH *(*get_param) (void);$/;"	m	struct:__anon3	file:
+get_privkey	app/TestEnclave_u.c	/^sgx_status_t get_privkey(sgx_enclave_id_t eid, char** retval, int id)$/;"	f
+get_privkey	enclave/TestEnclave.cpp	/^get_privkey(int id)$/;"	f
+get_pubkey	app/TestEnclave_u.c	/^sgx_status_t get_pubkey(sgx_enclave_id_t eid, char** retval, int id)$/;"	f
+get_pubkey	enclave/TestEnclave.cpp	/^get_pubkey(int id)$/;"	f
 getenv	enclave/tests/missing_funcs.c	/^char* getenv(char* name)$/;"	f
 getpid	enclave/tests/e_os.h	410;"	d
 getpid	enclave/tests/e_os.h	630;"	d
 getservbyname	enclave/tests/e_os.h	458;"	d
 getservbyname	enclave/tests/e_os.h	465;"	d
 group_order_tests	enclave/tests/ectest.c	/^static void group_order_tests(EC_GROUP *group)$/;"	f	file:
+handleErrors	aes.c	/^void handleErrors(void)$/;"	f
+init	app/TestApp.cpp	/^	static int init = 0;$/;"	v	file:
 internal_curve_test	enclave/tests/ectest.c	/^static void internal_curve_test(void)$/;"	f	file:
 ioctlsocket	enclave/tests/e_os.h	167;"	d
 ioctlsocket	enclave/tests/e_os.h	174;"	d
 ioctlsocket	enclave/tests/e_os.h	183;"	d
 ioctlsocket	enclave/tests/e_os.h	200;"	d
-is_priv	enclave/TestEnclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[5];$/;"	m	struct:__anon6::__anon7	file:
+is_priv	enclave/TestEnclave_t.c	/^	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[13];$/;"	m	struct:__anon6::__anon7	file:
 isalnum	enclave/tests/e_os.h	286;"	d
 isdigit	enclave/tests/e_os.h	285;"	d
 isspace	enclave/tests/e_os.h	284;"	d
 isupper	enclave/tests/e_os.h	287;"	d
 isxdigit	enclave/tests/e_os.h	288;"	d
-key	enclave/TestEnclave.cpp	/^        char *key;$/;"	m	union:key_array_t::key_type	file:
+key	enclave/TestEnclave.cpp	/^        struct aes_key_t key;\/\/ char *key;$/;"	m	union:key_array_t::key_type	typeref:struct:key_array_t::key_type::aes_key_t	file:
+key	enclave/TestEnclave.cpp	/^    unsigned char *key;$/;"	m	struct:aes_key_t	file:
 key1	enclave/tests/rsa_test.c	/^static int key1(RSA *key, unsigned char *c)$/;"	f	file:
 key2	enclave/tests/rsa_test.c	/^static int key2(RSA *key, unsigned char *c)$/;"	f	file:
 key3	enclave/tests/rsa_test.c	/^static int key3(RSA *key, unsigned char *c)$/;"	f	file:
@@ -466,17 +483,30 @@ key_array_t	enclave/TestEnclave.cpp	/^struct key_array_t {$/;"	s	file:
 key_type	enclave/TestEnclave.cpp	/^    union key_type {$/;"	u	struct:key_array_t	file:
 keygen	app/TestEnclave_u.c	/^sgx_status_t keygen(sgx_enclave_id_t eid, int* retval, int size)$/;"	f
 keygen	enclave/TestEnclave.cpp	/^keygen(int size){$/;"	f
-keypair	enclave/TestEnclave.cpp	/^        RSA *keypair;$/;"	m	union:key_array_t::key_type	file:
+keypair	enclave/TestEnclave.cpp	/^    RSA *keypair;$/;"	m	struct:rsa_key_t	file:
 kt	enclave/TestEnclave.cpp	/^    }kt;$/;"	m	struct:key_array_t	typeref:union:key_array_t::key_type	file:
 lock	enclave/TestEnclave.cpp	/^    CRYPTO_RWLOCK *lock;$/;"	m	struct:evp_pkey_st	file:
 lst	enclave/tests/bntest.c	/^static unsigned char lst[] =$/;"	v	file:
-m	enclave/TestEnclave.cpp	/^int m(int KEY_LENGTH){$/;"	f
-main	app/TestApp.cpp	/^    int main() {$/;"	f
+m	enclave/TestEnclave.cpp	/^m(int KEY_LENGTH)$/;"	f
+main	aes.c	/^int main (void)$/;"	f
+main	app/TestApp.cpp	/^	int main() {$/;"	f
 main	test.c	/^int main(void) {$/;"	f
 make_rfc5114_td	enclave/tests/dhtest.c	502;"	d	file:
 message	enclave/tests/bntest.c	/^static void message(BIO *out, char *m)$/;"	f	file:
 meth	enclave/tests/ectest.c	/^    const EC_METHOD *(*meth) ();$/;"	m	struct:nistp_test_params	file:
 mk_eckey	enclave/tests/ecdhtest.c	/^static EC_KEY *mk_eckey(int nid, const char *str)$/;"	f	file:
+ms_aes_decrypt_t	app/TestEnclave_u.c	/^typedef struct ms_aes_decrypt_t {$/;"	s	file:
+ms_aes_decrypt_t	app/TestEnclave_u.c	/^} ms_aes_decrypt_t;$/;"	t	typeref:struct:ms_aes_decrypt_t	file:
+ms_aes_decrypt_t	enclave/TestEnclave_t.c	/^typedef struct ms_aes_decrypt_t {$/;"	s	file:
+ms_aes_decrypt_t	enclave/TestEnclave_t.c	/^} ms_aes_decrypt_t;$/;"	t	typeref:struct:ms_aes_decrypt_t	file:
+ms_aes_encrypt_t	app/TestEnclave_u.c	/^typedef struct ms_aes_encrypt_t {$/;"	s	file:
+ms_aes_encrypt_t	app/TestEnclave_u.c	/^} ms_aes_encrypt_t;$/;"	t	typeref:struct:ms_aes_encrypt_t	file:
+ms_aes_encrypt_t	enclave/TestEnclave_t.c	/^typedef struct ms_aes_encrypt_t {$/;"	s	file:
+ms_aes_encrypt_t	enclave/TestEnclave_t.c	/^} ms_aes_encrypt_t;$/;"	t	typeref:struct:ms_aes_encrypt_t	file:
+ms_aes_getbytes_t	app/TestEnclave_u.c	/^typedef struct ms_aes_getbytes_t {$/;"	s	file:
+ms_aes_getbytes_t	app/TestEnclave_u.c	/^} ms_aes_getbytes_t;$/;"	t	typeref:struct:ms_aes_getbytes_t	file:
+ms_aes_getbytes_t	enclave/TestEnclave_t.c	/^typedef struct ms_aes_getbytes_t {$/;"	s	file:
+ms_aes_getbytes_t	enclave/TestEnclave_t.c	/^} ms_aes_getbytes_t;$/;"	t	typeref:struct:ms_aes_getbytes_t	file:
 ms_cpuinfo	app/TestEnclave_u.c	/^	int* ms_cpuinfo;$/;"	m	struct:ms_sgx_oc_cpuidex_t	file:
 ms_cpuinfo	enclave/TestEnclave_t.c	/^	int* ms_cpuinfo;$/;"	m	struct:ms_sgx_oc_cpuidex_t	file:
 ms_generate_keypair_t	app/TestEnclave_u.c	/^typedef struct ms_generate_keypair_t {$/;"	s	file:
@@ -487,22 +517,58 @@ ms_get_key_t	app/TestEnclave_u.c	/^typedef struct ms_get_key_t {$/;"	s	file:
 ms_get_key_t	app/TestEnclave_u.c	/^} ms_get_key_t;$/;"	t	typeref:struct:ms_get_key_t	file:
 ms_get_key_t	enclave/TestEnclave_t.c	/^typedef struct ms_get_key_t {$/;"	s	file:
 ms_get_key_t	enclave/TestEnclave_t.c	/^} ms_get_key_t;$/;"	t	typeref:struct:ms_get_key_t	file:
+ms_get_privkey_t	app/TestEnclave_u.c	/^typedef struct ms_get_privkey_t {$/;"	s	file:
+ms_get_privkey_t	app/TestEnclave_u.c	/^} ms_get_privkey_t;$/;"	t	typeref:struct:ms_get_privkey_t	file:
+ms_get_privkey_t	enclave/TestEnclave_t.c	/^typedef struct ms_get_privkey_t {$/;"	s	file:
+ms_get_privkey_t	enclave/TestEnclave_t.c	/^} ms_get_privkey_t;$/;"	t	typeref:struct:ms_get_privkey_t	file:
+ms_get_pubkey_t	app/TestEnclave_u.c	/^typedef struct ms_get_pubkey_t {$/;"	s	file:
+ms_get_pubkey_t	app/TestEnclave_u.c	/^} ms_get_pubkey_t;$/;"	t	typeref:struct:ms_get_pubkey_t	file:
+ms_get_pubkey_t	enclave/TestEnclave_t.c	/^typedef struct ms_get_pubkey_t {$/;"	s	file:
+ms_get_pubkey_t	enclave/TestEnclave_t.c	/^} ms_get_pubkey_t;$/;"	t	typeref:struct:ms_get_pubkey_t	file:
 ms_got	app/TestEnclave_u.c	/^	char* ms_got;$/;"	m	struct:ms_get_key_t	file:
 ms_got	app/TestEnclave_u.c	/^	char* ms_got;$/;"	m	struct:ms_print_data_t	file:
 ms_got	enclave/TestEnclave_t.c	/^	char* ms_got;$/;"	m	struct:ms_get_key_t	file:
 ms_got	enclave/TestEnclave_t.c	/^	char* ms_got;$/;"	m	struct:ms_print_data_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_aes_encrypt_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_aes_getbytes_t	file:
 ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_get_key_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_get_privkey_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_get_pubkey_t	file:
 ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_print_key_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_rsa_decrypt_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_rsa_encrypt_t	file:
+ms_id	app/TestEnclave_u.c	/^	int ms_id;$/;"	m	struct:ms_rsa_get_key_size_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_aes_encrypt_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_aes_getbytes_t	file:
 ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_get_key_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_get_privkey_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_get_pubkey_t	file:
 ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_print_key_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_rsa_decrypt_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_rsa_encrypt_t	file:
+ms_id	enclave/TestEnclave_t.c	/^	int ms_id;$/;"	m	struct:ms_rsa_get_key_size_t	file:
 ms_keygen_t	app/TestEnclave_u.c	/^typedef struct ms_keygen_t {$/;"	s	file:
 ms_keygen_t	app/TestEnclave_u.c	/^} ms_keygen_t;$/;"	t	typeref:struct:ms_keygen_t	file:
 ms_keygen_t	enclave/TestEnclave_t.c	/^typedef struct ms_keygen_t {$/;"	s	file:
 ms_keygen_t	enclave/TestEnclave_t.c	/^} ms_keygen_t;$/;"	t	typeref:struct:ms_keygen_t	file:
 ms_leaf	app/TestEnclave_u.c	/^	int ms_leaf;$/;"	m	struct:ms_sgx_oc_cpuidex_t	file:
 ms_leaf	enclave/TestEnclave_t.c	/^	int ms_leaf;$/;"	m	struct:ms_sgx_oc_cpuidex_t	file:
+ms_len	app/TestEnclave_u.c	/^	int ms_len;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_len	app/TestEnclave_u.c	/^	int ms_len;$/;"	m	struct:ms_aes_encrypt_t	file:
 ms_len	app/TestEnclave_u.c	/^	int ms_len;$/;"	m	struct:ms_print_data_t	file:
+ms_len	enclave/TestEnclave_t.c	/^	int ms_len;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_len	enclave/TestEnclave_t.c	/^	int ms_len;$/;"	m	struct:ms_aes_encrypt_t	file:
 ms_len	enclave/TestEnclave_t.c	/^	int ms_len;$/;"	m	struct:ms_print_data_t	file:
+ms_msg	app/TestEnclave_u.c	/^	char* ms_msg;$/;"	m	struct:ms_aes_encrypt_t	file:
+ms_msg	app/TestEnclave_u.c	/^	char* ms_msg;$/;"	m	struct:ms_rsa_encrypt_t	file:
+ms_msg	app/TestEnclave_u.c	/^	unsigned char* ms_msg;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_msg	app/TestEnclave_u.c	/^	unsigned char* ms_msg;$/;"	m	struct:ms_rsa_decrypt_t	file:
+ms_msg	enclave/TestEnclave_t.c	/^	char* ms_msg;$/;"	m	struct:ms_aes_encrypt_t	file:
+ms_msg	enclave/TestEnclave_t.c	/^	char* ms_msg;$/;"	m	struct:ms_rsa_encrypt_t	file:
+ms_msg	enclave/TestEnclave_t.c	/^	unsigned char* ms_msg;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_msg	enclave/TestEnclave_t.c	/^	unsigned char* ms_msg;$/;"	m	struct:ms_rsa_decrypt_t	file:
 ms_ocall_print_t	app/TestEnclave_u.c	/^typedef struct ms_ocall_print_t {$/;"	s	file:
 ms_ocall_print_t	app/TestEnclave_u.c	/^} ms_ocall_print_t;$/;"	t	typeref:struct:ms_ocall_print_t	file:
 ms_ocall_print_t	enclave/TestEnclave_t.c	/^typedef struct ms_ocall_print_t {$/;"	s	file:
@@ -519,22 +585,50 @@ ms_print_rsa_key_t	app/TestEnclave_u.c	/^typedef struct ms_print_rsa_key_t {$/;"
 ms_print_rsa_key_t	app/TestEnclave_u.c	/^} ms_print_rsa_key_t;$/;"	t	typeref:struct:ms_print_rsa_key_t	file:
 ms_print_rsa_key_t	enclave/TestEnclave_t.c	/^typedef struct ms_print_rsa_key_t {$/;"	s	file:
 ms_print_rsa_key_t	enclave/TestEnclave_t.c	/^} ms_print_rsa_key_t;$/;"	t	typeref:struct:ms_print_rsa_key_t	file:
+ms_r	app/TestEnclave_u.c	/^	char* ms_r;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_r	app/TestEnclave_u.c	/^	char* ms_r;$/;"	m	struct:ms_rsa_decrypt_t	file:
 ms_r	app/TestEnclave_u.c	/^	uint8_t* ms_r;$/;"	m	struct:ms_print_rsa_key_t	file:
+ms_r	enclave/TestEnclave_t.c	/^	char* ms_r;$/;"	m	struct:ms_aes_decrypt_t	file:
+ms_r	enclave/TestEnclave_t.c	/^	char* ms_r;$/;"	m	struct:ms_rsa_decrypt_t	file:
 ms_r	enclave/TestEnclave_t.c	/^	uint8_t* ms_r;$/;"	m	struct:ms_print_rsa_key_t	file:
 ms_reason	app/TestEnclave_u.c	/^	int ms_reason;$/;"	m	struct:ms_usgx_exit_t	file:
 ms_reason	enclave/TestEnclave_t.c	/^	int ms_reason;$/;"	m	struct:ms_usgx_exit_t	file:
+ms_retval	app/TestEnclave_u.c	/^	char* ms_retval;$/;"	m	struct:ms_get_privkey_t	file:
+ms_retval	app/TestEnclave_u.c	/^	char* ms_retval;$/;"	m	struct:ms_get_pubkey_t	file:
+ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_aes_getbytes_t	file:
 ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_generate_keypair_t	file:
 ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_keygen_t	file:
+ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_rsa_get_key_size_t	file:
 ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_set_multiple_untrusted_events_ocall_t	file:
 ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_set_untrusted_event_ocall_t	file:
 ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_setwait_untrusted_events_ocall_t	file:
 ms_retval	app/TestEnclave_u.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_wait_untrusted_event_ocall_t	file:
+ms_retval	app/TestEnclave_u.c	/^	unsigned char* ms_retval;$/;"	m	struct:ms_aes_encrypt_t	file:
+ms_retval	app/TestEnclave_u.c	/^	unsigned char* ms_retval;$/;"	m	struct:ms_rsa_encrypt_t	file:
+ms_retval	enclave/TestEnclave_t.c	/^	char* ms_retval;$/;"	m	struct:ms_get_privkey_t	file:
+ms_retval	enclave/TestEnclave_t.c	/^	char* ms_retval;$/;"	m	struct:ms_get_pubkey_t	file:
+ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_aes_getbytes_t	file:
 ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_generate_keypair_t	file:
 ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_keygen_t	file:
+ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_rsa_get_key_size_t	file:
 ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_set_multiple_untrusted_events_ocall_t	file:
 ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_set_untrusted_event_ocall_t	file:
 ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_setwait_untrusted_events_ocall_t	file:
 ms_retval	enclave/TestEnclave_t.c	/^	int ms_retval;$/;"	m	struct:ms_sgx_thread_wait_untrusted_event_ocall_t	file:
+ms_retval	enclave/TestEnclave_t.c	/^	unsigned char* ms_retval;$/;"	m	struct:ms_aes_encrypt_t	file:
+ms_retval	enclave/TestEnclave_t.c	/^	unsigned char* ms_retval;$/;"	m	struct:ms_rsa_encrypt_t	file:
+ms_rsa_decrypt_t	app/TestEnclave_u.c	/^typedef struct ms_rsa_decrypt_t {$/;"	s	file:
+ms_rsa_decrypt_t	app/TestEnclave_u.c	/^} ms_rsa_decrypt_t;$/;"	t	typeref:struct:ms_rsa_decrypt_t	file:
+ms_rsa_decrypt_t	enclave/TestEnclave_t.c	/^typedef struct ms_rsa_decrypt_t {$/;"	s	file:
+ms_rsa_decrypt_t	enclave/TestEnclave_t.c	/^} ms_rsa_decrypt_t;$/;"	t	typeref:struct:ms_rsa_decrypt_t	file:
+ms_rsa_encrypt_t	app/TestEnclave_u.c	/^typedef struct ms_rsa_encrypt_t {$/;"	s	file:
+ms_rsa_encrypt_t	app/TestEnclave_u.c	/^} ms_rsa_encrypt_t;$/;"	t	typeref:struct:ms_rsa_encrypt_t	file:
+ms_rsa_encrypt_t	enclave/TestEnclave_t.c	/^typedef struct ms_rsa_encrypt_t {$/;"	s	file:
+ms_rsa_encrypt_t	enclave/TestEnclave_t.c	/^} ms_rsa_encrypt_t;$/;"	t	typeref:struct:ms_rsa_encrypt_t	file:
+ms_rsa_get_key_size_t	app/TestEnclave_u.c	/^typedef struct ms_rsa_get_key_size_t {$/;"	s	file:
+ms_rsa_get_key_size_t	app/TestEnclave_u.c	/^} ms_rsa_get_key_size_t;$/;"	t	typeref:struct:ms_rsa_get_key_size_t	file:
+ms_rsa_get_key_size_t	enclave/TestEnclave_t.c	/^typedef struct ms_rsa_get_key_size_t {$/;"	s	file:
+ms_rsa_get_key_size_t	enclave/TestEnclave_t.c	/^} ms_rsa_get_key_size_t;$/;"	t	typeref:struct:ms_rsa_get_key_size_t	file:
 ms_self	app/TestEnclave_u.c	/^	const void* ms_self;$/;"	m	struct:ms_sgx_thread_setwait_untrusted_events_ocall_t	file:
 ms_self	app/TestEnclave_u.c	/^	const void* ms_self;$/;"	m	struct:ms_sgx_thread_wait_untrusted_event_ocall_t	file:
 ms_self	enclave/TestEnclave_t.c	/^	const void* ms_self;$/;"	m	struct:ms_sgx_thread_setwait_untrusted_events_ocall_t	file:
@@ -595,7 +689,7 @@ ms_waiter	enclave/TestEnclave_t.c	/^	const void* ms_waiter;$/;"	m	struct:ms_sgx_
 ms_waiter	enclave/TestEnclave_t.c	/^	const void* ms_waiter;$/;"	m	struct:ms_sgx_thread_setwait_untrusted_events_ocall_t	file:
 ms_waiters	app/TestEnclave_u.c	/^	const void** ms_waiters;$/;"	m	struct:ms_sgx_thread_set_multiple_untrusted_events_ocall_t	file:
 ms_waiters	enclave/TestEnclave_t.c	/^	const void** ms_waiters;$/;"	m	struct:ms_sgx_thread_set_multiple_untrusted_events_ocall_t	file:
-msg	app/TestApp.cpp	/^        const char *msg;$/;"	m	struct:_sgx_errlist_t	file:
+msg	app/TestApp.cpp	/^		const char *msg;$/;"	m	struct:_sgx_errlist_t	file:
 mul	enclave/tests/bn_lcl.h	586;"	d
 mul	enclave/tests/bn_lcl.h	613;"	d
 mul	enclave/tests/bn_lcl.h	641;"	d
@@ -608,7 +702,7 @@ mul_add	enclave/tests/bn_lcl.h	705;"	d
 n0	enclave/tests/bn_lcl.h	/^    BN_ULONG n0[2];             \/* least significant word(s) of Ni; (type$/;"	m	struct:bn_mont_ctx_st
 neg	enclave/tests/bn_lcl.h	/^    int neg;                    \/* one if the number is negative *\/$/;"	m	struct:bignum_st
 new_thread_func	enclave/tests/threadstest.c	/^void new_thread_func()$/;"	f
-nid	enclave/tests/ecdhtest.c	/^    const int nid;$/;"	m	struct:__anon4	file:
+nid	enclave/tests/ecdhtest.c	/^    const int nid;$/;"	m	struct:__anon2	file:
 nid	enclave/tests/ecdhtest_cavs.h	/^    const int nid;$/;"	m	struct:__anon5
 nistp_single_test	enclave/tests/ectest.c	/^static void nistp_single_test(const struct nistp_test_params *test)$/;"	f	file:
 nistp_test_params	enclave/tests/ectest.c	/^struct nistp_test_params {$/;"	s	file:
@@ -622,7 +716,7 @@ num1	enclave/tests/bntest.c	/^static const int num1 = 50;            \/* additio
 num2	enclave/tests/bntest.c	/^static const int num2 = 5;             \/* number of tests for slow functions *\/$/;"	v	file:
 num_bits	enclave/tests/bn_lcl.h	/^    int num_bits;$/;"	m	struct:bn_recp_ctx_st
 numbers	enclave/tests/ecdsatest.c	/^static const char *numbers[8] = {$/;"	v	file:
-ocall_print	app/TestApp.cpp	/^        ocall_print(char *value)$/;"	f
+ocall_print	app/TestApp.cpp	/^		ocall_print(char *value)$/;"	f
 ocall_print	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL ocall_print(char* value)$/;"	f
 ocall_table_TestEnclave	app/TestEnclave_u.c	/^} ocall_table_TestEnclave = {$/;"	v	typeref:struct:__anon1	file:
 old_rand	enclave/tests/ecdsatest.c	/^static const RAND_METHOD *old_rand;$/;"	v	file:
@@ -637,21 +731,23 @@ pad_unknown	enclave/tests/rsa_test.c	/^static int pad_unknown(void)$/;"	f	file:
 perror	enclave/tests/bntest.c	87;"	d	file:
 pkey	enclave/TestEnclave.cpp	/^    } pkey;$/;"	m	struct:evp_pkey_st	typeref:union:evp_pkey_st::__anon9	file:
 prime_field_tests	enclave/tests/ectest.c	/^static void prime_field_tests(void)$/;"	f	file:
-print_data	app/TestApp.cpp	/^        print_data(char *got, int len)$/;"	f
+print_data	app/TestApp.cpp	/^		print_data(char *got, int len)$/;"	f
 print_data	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL print_data(char* got, int len)$/;"	f
-print_error_message	app/TestApp.cpp	/^    void print_error_message(sgx_status_t ret)$/;"	f
+print_error_message	app/TestApp.cpp	/^	void print_error_message(sgx_status_t ret)$/;"	f
 print_fp	enclave/tests/stdio_func.c	/^static int print_fp(const char *str, size_t len, void *fp)$/;"	f	file:
 print_key	app/TestEnclave_u.c	/^sgx_status_t print_key(sgx_enclave_id_t eid, int id)$/;"	f
 print_key	enclave/TestEnclave.cpp	/^print_key(int id){$/;"	f
-print_rsa_key	app/TestApp.cpp	/^        print_rsa_key(uint8_t *r){$/;"	f
+print_rsa_key	app/TestApp.cpp	/^		print_rsa_key(uint8_t *r){$/;"	f
 print_rsa_key	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL print_rsa_key(uint8_t* r)$/;"	f
 print_word	enclave/tests/bntest.c	/^static void print_word(BIO *bp, BN_ULONG w)$/;"	f	file:
 printf	enclave/TestEnclave.cpp	/^void printf(const char *fmt, ...)$/;"	f
+privkey	enclave/TestEnclave.cpp	/^    char *privkey;$/;"	m	struct:rsa_key_t	file:
 pt	enclave/tests/sha1test.c	/^static char *pt(unsigned char *md)$/;"	f	file:
 pthread_key_t	enclave/tests/threads.h	/^typedef unsigned int pthread_key_t;$/;"	t
 pthread_once_t	enclave/tests/threads.h	/^typedef int pthread_once_t;$/;"	t
 pthread_t	enclave/tests/threads.h	/^typedef unsigned long int pthread_t;$/;"	t
 ptr	enclave/TestEnclave.cpp	/^        char *ptr;$/;"	m	union:evp_pkey_st::__anon9	file:
+pubkey	enclave/TestEnclave.cpp	/^    char *pubkey;$/;"	m	struct:rsa_key_t	file:
 putc	enclave/tests/bntest.c	88;"	d	file:
 puts	enclave/tests/missing_funcs.c	/^int puts(const char* str)$/;"	f
 rand_neg	enclave/tests/bntest.c	/^int rand_neg(void)$/;"	f
@@ -667,9 +763,10 @@ references	enclave/TestEnclave.cpp	/^    int references;$/;"	m	struct:evp_pkey_s
 restore_rand	enclave/tests/ecdsatest.c	/^int restore_rand(void)$/;"	f
 results	enclave/tests/bntest.c	/^static int results = 0;$/;"	v	file:
 ret	enclave/tests/sha1test.c	/^static char *ret[] = {$/;"	v	file:
-rfc5114_td	enclave/tests/dhtest.c	/^} rfc5114_td;$/;"	t	typeref:struct:__anon2	file:
+rfc5114_td	enclave/tests/dhtest.c	/^} rfc5114_td;$/;"	t	typeref:struct:__anon3	file:
 rfctd	enclave/tests/dhtest.c	/^static const rfc5114_td rfctd[] = {$/;"	v	file:
 ri	enclave/tests/bn_lcl.h	/^    int ri;                     \/* number of bits in R *\/$/;"	m	struct:bn_mont_ctx_st
+rk	enclave/TestEnclave.cpp	/^        struct rsa_key_t rk;$/;"	m	union:key_array_t::key_type	typeref:struct:key_array_t::key_type::rsa_key_t	file:
 rnd_seed	enclave/tests/bntest.c	/^static const char rnd_seed[] =$/;"	v	file:
 rnd_seed	enclave/tests/dhtest.c	/^static const char rnd_seed[] =$/;"	v	file:
 rnd_seed	enclave/tests/ecdhtest.c	/^static const char rnd_seed[] =$/;"	v	file:
@@ -677,19 +774,34 @@ rnd_seed	enclave/tests/ecdsatest.c	/^static const char rnd_seed[] = "string to m
 rnd_seed	enclave/tests/ectest.c	/^static const char rnd_seed[] =$/;"	v	file:
 rnd_seed	enclave/tests/rsa_test.c	/^static const char rnd_seed[] =$/;"	v	file:
 rsa	enclave/TestEnclave.cpp	/^        struct rsa_st *rsa;     \/* RSA *\/$/;"	m	union:evp_pkey_st::__anon9	typeref:struct:evp_pkey_st::__anon9::rsa_st	file:
-rsa_encrypt	enclave/TestEnclave.cpp	/^void rsa_encrypt(int id, char *msg) {$/;"	f
+rsa_decrypt	app/TestEnclave_u.c	/^sgx_status_t rsa_decrypt(sgx_enclave_id_t eid, int id, unsigned char* msg, char* r)$/;"	f
+rsa_decrypt	enclave/TestEnclave.cpp	/^void rsa_decrypt(int id, unsigned char *encrypt, char *result) {$/;"	f
+rsa_encrypt	app/TestEnclave_u.c	/^sgx_status_t rsa_encrypt(sgx_enclave_id_t eid, unsigned char** retval, int id, char* msg)$/;"	f
+rsa_encrypt	enclave/TestEnclave.cpp	/^unsigned char *rsa_encrypt(int id, char *msg) {$/;"	f
+rsa_get_key_size	app/TestEnclave_u.c	/^sgx_status_t rsa_get_key_size(sgx_enclave_id_t eid, int* retval, int id)$/;"	f
+rsa_get_key_size	enclave/TestEnclave.cpp	/^int rsa_get_key_size(int id)$/;"	f
+rsa_key	enclave/TestEnclave.cpp	/^}rsa_key;$/;"	v	typeref:struct:rsa_key_t
+rsa_key_t	enclave/TestEnclave.cpp	/^struct rsa_key_t{$/;"	s	file:
 rsa_test	enclave/tests/rsa_test.c	/^int rsa_test()$/;"	f
 run_rfc5114_tests	enclave/tests/dhtest.c	/^static int run_rfc5114_tests(void)$/;"	f	file:
 run_thread	enclave/tests/threadstest.c	/^static int run_thread(thread_t *t, void (*f)(void))$/;"	f	file:
 save_parameters	enclave/TestEnclave.cpp	/^    int save_parameters;$/;"	m	struct:evp_pkey_st	file:
 save_type	enclave/TestEnclave.cpp	/^    int save_type;$/;"	m	struct:evp_pkey_st	file:
-sgx_errlist	app/TestApp.cpp	/^    static sgx_errlist_t sgx_errlist[] = {$/;"	v	file:
-sgx_errlist_t	app/TestApp.cpp	/^    } sgx_errlist_t;$/;"	t	typeref:struct:_sgx_errlist_t	file:
+sgx_aes_decrypt	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_aes_decrypt(void* pms)$/;"	f	file:
+sgx_aes_encrypt	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_aes_encrypt(void* pms)$/;"	f	file:
+sgx_aes_getbytes	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_aes_getbytes(void* pms)$/;"	f	file:
+sgx_errlist	app/TestApp.cpp	/^	static sgx_errlist_t sgx_errlist[] = {$/;"	v	file:
+sgx_errlist_t	app/TestApp.cpp	/^	} sgx_errlist_t;$/;"	t	typeref:struct:_sgx_errlist_t	file:
 sgx_generate_keypair	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_generate_keypair(void* pms)$/;"	f	file:
 sgx_get_key	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_get_key(void* pms)$/;"	f	file:
+sgx_get_privkey	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_get_privkey(void* pms)$/;"	f	file:
+sgx_get_pubkey	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_get_pubkey(void* pms)$/;"	f	file:
 sgx_keygen	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_keygen(void* pms)$/;"	f	file:
 sgx_oc_cpuidex	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf)$/;"	f
 sgx_print_key	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_print_key(void* pms)$/;"	f	file:
+sgx_rsa_decrypt	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_rsa_decrypt(void* pms)$/;"	f	file:
+sgx_rsa_encrypt	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_rsa_encrypt(void* pms)$/;"	f	file:
+sgx_rsa_get_key_size	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_rsa_get_key_size(void* pms)$/;"	f	file:
 sgx_startup	enclave/TestEnclave_t.c	/^static sgx_status_t SGX_CDECL sgx_startup(void* pms)$/;"	f	file:
 sgx_thread_set_multiple_untrusted_events_ocall	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL sgx_thread_set_multiple_untrusted_events_ocall(int* retval, const void** waiters, size_t total)$/;"	f
 sgx_thread_set_untrusted_event_ocall	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL sgx_thread_set_untrusted_event_ocall(int* retval, const void* waiter)$/;"	f
@@ -735,12 +847,13 @@ strcasecmp	enclave/tests/e_os.h	591;"	d
 strcasecmp	enclave/tests/e_os.h	596;"	d
 strcasecmp	enclave/tests/e_os.h	600;"	d
 strcasecmp	enclave/tests/e_os.h	605;"	d
+strdup	enclave/TestEnclave.cpp	/^strdup (char *s)$/;"	f
 strlen	enclave/tests/e_os.h	271;"	d
 strncasecmp	enclave/tests/e_os.h	592;"	d
 strncasecmp	enclave/tests/e_os.h	597;"	d
 strncasecmp	enclave/tests/e_os.h	601;"	d
 strncasecmp	enclave/tests/e_os.h	606;"	d
-sug	app/TestApp.cpp	/^        const char *sug; \/* Suggestion *\/$/;"	m	struct:_sgx_errlist_t	file:
+sug	app/TestApp.cpp	/^		const char *sug; \/* Suggestion *\/$/;"	m	struct:_sgx_errlist_t	file:
 table	app/TestEnclave_u.c	/^	void * table[11];$/;"	m	struct:__anon1	file:
 test	enclave/tests/sha1test.c	/^static char *test[] = {$/;"	v	file:
 test_add	enclave/tests/bntest.c	/^int test_add(BIO *bp)$/;"	f
@@ -788,21 +901,28 @@ top	enclave/tests/bn_lcl.h	/^    int top;                    \/* Index of last u
 type	enclave/TestEnclave.cpp	/^    int type;$/;"	m	struct:evp_pkey_st	file:
 type	enclave/TestEnclave.cpp	/^    short type;$/;"	m	struct:key_array_t	file:
 u_sgxssl_ftime	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL u_sgxssl_ftime(void* timeptr, uint32_t timeb_len)$/;"	f
-uprint	app/TestApp.cpp	/^    void uprint(const char *str)$/;"	f
+uprint	app/TestApp.cpp	/^	void uprint(const char *str)$/;"	f
 uprint	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL uprint(const char* str)$/;"	f
 use_fake	enclave/tests/ecdsatest.c	/^static int fbytes_counter = 0, use_fake = 0;$/;"	v	file:
-usgx_exit	app/TestApp.cpp	/^    void usgx_exit(int reason)$/;"	f
+usgx_exit	app/TestApp.cpp	/^	void usgx_exit(int reason)$/;"	f
 usgx_exit	enclave/TestEnclave_t.c	/^sgx_status_t SGX_CDECL usgx_exit(int reason)$/;"	f
 ver	enclave/tests/bn_lcl.h	/^    unsigned int ver;           \/* To handle binary (in)compatibility *\/$/;"	m	struct:bn_gencb_st
 vprintf_cb	enclave/TestEnclave.cpp	/^int vprintf_cb(Stream_t stream, const char * fmt, va_list arg)$/;"	f
 wait_for_thread	enclave/tests/threadstest.c	/^static int wait_for_thread(thread_t thread)$/;"	f	file:
-wrapper_get_key	app/TestApp.cpp	/^    char *wrapper_get_key(int id, int size){$/;"	f
-wrapper_init_enclave	app/TestApp.cpp	/^        wrapper_init_enclave()$/;"	f
-wrapper_keygen	app/TestApp.cpp	/^    int wrapper_keygen(int size){$/;"	f
-wrapper_print_key	app/TestApp.cpp	/^    void wrapper_print_key(int id){$/;"	f
-wrapper_rsa_get_key	app/TestApp.cpp	/^    char *wrapper_rsa_get_key(int id, int size){$/;"	f
-wrapper_rsa_keygen	app/TestApp.cpp	/^    int wrapper_rsa_keygen(int size){$/;"	f
-wrapper_rsa_print_key	app/TestApp.cpp	/^    void wrapper_rsa_print_key(int id){$/;"	f
+wrapper_aes_decrypt	app/TestApp.cpp	/^		wrapper_aes_decrypt(int id, unsigned char *string, int len)$/;"	f
+wrapper_aes_encrypt	app/TestApp.cpp	/^		wrapper_aes_encrypt(int id, char *string, int len)$/;"	f
+wrapper_aes_getbytes	app/TestApp.cpp	/^		wrapper_aes_getbytes(int id)$/;"	f
+wrapper_get_key	app/TestApp.cpp	/^		wrapper_get_key(int id, int size)$/;"	f
+wrapper_init_enclave	app/TestApp.cpp	/^		wrapper_init_enclave()$/;"	f
+wrapper_keygen	app/TestApp.cpp	/^		wrapper_keygen(int size)$/;"	f
+wrapper_print_key	app/TestApp.cpp	/^		wrapper_print_key(int id)$/;"	f
+wrapper_rsa_decrypt	app/TestApp.cpp	/^		wrapper_rsa_decrypt(int id, unsigned char *string)$/;"	f
+wrapper_rsa_encrypt	app/TestApp.cpp	/^		wrapper_rsa_encrypt(int id, char *string)$/;"	f
+wrapper_rsa_get_key_size	app/TestApp.cpp	/^		wrapper_rsa_get_key_size(int id)$/;"	f
+wrapper_rsa_get_privkey	app/TestApp.cpp	/^		wrapper_rsa_get_privkey(int id)$/;"	f
+wrapper_rsa_get_pubkey	app/TestApp.cpp	/^		wrapper_rsa_get_pubkey(int id)$/;"	f
+wrapper_rsa_keygen	app/TestApp.cpp	/^		wrapper_rsa_keygen(int size)$/;"	f
+wrapper_rsa_print_key	app/TestApp.cpp	/^		wrapper_rsa_print_key(int id)$/;"	f
 writesocket	enclave/tests/e_os.h	156;"	d
 writesocket	enclave/tests/e_os.h	163;"	d
 writesocket	enclave/tests/e_os.h	170;"	d
@@ -813,11 +933,11 @@ writesocket	enclave/tests/e_os.h	195;"	d
 writesocket	enclave/tests/e_os.h	203;"	d
 x9_62_test_internal	enclave/tests/ecdsatest.c	/^int x9_62_test_internal(BIO *out, int nid, const char *r_in, const char *s_in)$/;"	f
 x9_62_tests	enclave/tests/ecdsatest.c	/^int x9_62_tests(BIO *out)$/;"	f
-xA	enclave/tests/dhtest.c	/^    const unsigned char *xA;$/;"	m	struct:__anon2	file:
-xA_len	enclave/tests/dhtest.c	/^    size_t xA_len;$/;"	m	struct:__anon2	file:
-xB	enclave/tests/dhtest.c	/^    const unsigned char *xB;$/;"	m	struct:__anon2	file:
-xB_len	enclave/tests/dhtest.c	/^    size_t xB_len;$/;"	m	struct:__anon2	file:
-yA	enclave/tests/dhtest.c	/^    const unsigned char *yA;$/;"	m	struct:__anon2	file:
-yA_len	enclave/tests/dhtest.c	/^    size_t yA_len;$/;"	m	struct:__anon2	file:
-yB	enclave/tests/dhtest.c	/^    const unsigned char *yB;$/;"	m	struct:__anon2	file:
-yB_len	enclave/tests/dhtest.c	/^    size_t yB_len;$/;"	m	struct:__anon2	file:
+xA	enclave/tests/dhtest.c	/^    const unsigned char *xA;$/;"	m	struct:__anon3	file:
+xA_len	enclave/tests/dhtest.c	/^    size_t xA_len;$/;"	m	struct:__anon3	file:
+xB	enclave/tests/dhtest.c	/^    const unsigned char *xB;$/;"	m	struct:__anon3	file:
+xB_len	enclave/tests/dhtest.c	/^    size_t xB_len;$/;"	m	struct:__anon3	file:
+yA	enclave/tests/dhtest.c	/^    const unsigned char *yA;$/;"	m	struct:__anon3	file:
+yA_len	enclave/tests/dhtest.c	/^    size_t yA_len;$/;"	m	struct:__anon3	file:
+yB	enclave/tests/dhtest.c	/^    const unsigned char *yB;$/;"	m	struct:__anon3	file:
+yB_len	enclave/tests/dhtest.c	/^    size_t yB_len;$/;"	m	struct:__anon3	file:

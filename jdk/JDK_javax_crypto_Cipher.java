@@ -35,7 +35,7 @@ final class JDK_javax_crypto_Cipher {
 		int id = 0; 
 		custom_info c = new custom_info();
 		System.loadLibrary("hello");              
-
+		System.out.println("MXVM in dofinal about to dofinalxd");
 		c = JDK_java_security_KeyPair.myhash.get((Object)this);
 		id = c.id;
 

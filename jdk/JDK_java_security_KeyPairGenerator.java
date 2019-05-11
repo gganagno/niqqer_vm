@@ -59,94 +59,94 @@ final class JDK_java_security_KeyPairGenerator {
 
 
 
-	@SUBSTITUTE
-	public void initialize(int keysize) {
-		System.loadLibrary("hello");
-		custom_info c = new custom_info();
-		c.id = -1;
-		c.type = -1;
-		c.keysize = keysize;
-		JDK_java_security_KeyPair.addkey(this, c);
-	}
+    @SUBSTITUTE
+    public void initialize(int keysize) {
+        System.loadLibrary("hello");
+        custom_info c = new custom_info();
+        c.id = -1;
+        c.type = -1;
+        c.keysize = keysize;
+        JDK_java_security_KeyPair.addkey(this, c);
+    }
 
-	public static PrivateKey readPrivateKey(String key) {
+    public static PrivateKey readPrivateKey(String key) {
 
-		try {
-			String content = new String(key);
-			content = content.replaceAll("\\n", "").replace("-----BEGIN RSA PRIVATE KEY-----", "")
-				.replace("-----END RSA PRIVATE KEY-----", "");
-			//System.out.println("'" + content + "'");
-			byte[] bytes = Base64.getDecoder().decode(content);
+        try {
+            String content = new String(key);
+            content = content.replaceAll("\\n", "").replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .replace("-----END RSA PRIVATE KEY-----", "");
+            //System.out.println("'" + content + "'");
+            byte[] bytes = Base64.getDecoder().decode(content);
 
-			DerInputStream derReader = new DerInputStream(bytes);
-			DerValue[] seq = derReader.getSequence(0);
-			// skip version seq[0];
-			BigInteger modulus = seq[1].getBigInteger();
-			BigInteger publicExp = seq[2].getBigInteger();
-			BigInteger privateExp = seq[3].getBigInteger();
-			BigInteger prime1 = seq[4].getBigInteger();
-			BigInteger prime2 = seq[5].getBigInteger();
-			BigInteger exp1 = seq[6].getBigInteger();
-			BigInteger exp2 = seq[7].getBigInteger();
-			BigInteger crtCoef = seq[8].getBigInteger();
-			RSAPrivateCrtKeySpec keySpec =
-				new RSAPrivateCrtKeySpec(modulus, publicExp, privateExp, prime1, prime2, exp1, exp2, crtCoef);
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-			return privateKey;
-		} catch (Exception e) {
-			System.out.println("XDD ta pia\n");
-		}
-		return null;
-	}
-
-
+            DerInputStream derReader = new DerInputStream(bytes);
+            DerValue[] seq = derReader.getSequence(0);
+            // skip version seq[0];
+            BigInteger modulus = seq[1].getBigInteger();
+            BigInteger publicExp = seq[2].getBigInteger();
+            BigInteger privateExp = seq[3].getBigInteger();
+            BigInteger prime1 = seq[4].getBigInteger();
+            BigInteger prime2 = seq[5].getBigInteger();
+            BigInteger exp1 = seq[6].getBigInteger();
+            BigInteger exp2 = seq[7].getBigInteger();
+            BigInteger crtCoef = seq[8].getBigInteger();
+            RSAPrivateCrtKeySpec keySpec =
+                new RSAPrivateCrtKeySpec(modulus, publicExp, privateExp, prime1, prime2, exp1, exp2, crtCoef);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+            return privateKey;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
 
 
 
-	@SUBSTITUTE
-	public final KeyPair genKeyPair() {	
-		int id;
-		String privKeyPem, publicKeyContent;
-		jni_rsa_helper n = new jni_rsa_helper();
-	
-		custom_info c = JDK_java_security_KeyPair.myhash.get(this);
-		c.algo = 1;
-		c.type = -1;
+
+
+    @SUBSTITUTE
+    public final KeyPair genKeyPair() { 
+        int id;
+        String privKeyPem, publicKeyContent;
+        jni_rsa_helper n = new jni_rsa_helper();
+    
+        custom_info c = JDK_java_security_KeyPair.myhash.get(this);
+        c.algo = 1;
+        c.type = -1;
 
 
 
 
-		id = n.SGX_KeyPairGenerator_generateKey(c.keysize);
+        id = n.SGX_KeyPairGenerator_generateKey(c.keysize);
 
-		c.id = id;
-		publicKeyContent = n.SGX_KeyPairGenerator_get_pubkey(id);
-		privKeyPem = n.SGX_KeyPairGenerator_get_privkey(id);
-		KeyPairGenerator p = null;
-		try {
-			p = KeyPairGenerator.getInstance("RSA");
-			p.initialize(c.keysize);
-			publicKeyContent = publicKeyContent.replace("-----END RSA PUBLIC KEY-----", "");
-			publicKeyContent = publicKeyContent.replace("-----BEGIN RSA PUBLIC KEY-----", "");
-			publicKeyContent = publicKeyContent.replace("\n", "");
+        c.id = id;
+        publicKeyContent = n.SGX_KeyPairGenerator_get_pubkey(id);
+        privKeyPem = n.SGX_KeyPairGenerator_get_privkey(id);
+        KeyPairGenerator p = null;
+        try {
+            p = KeyPairGenerator.getInstance("RSA");
+            p.initialize(c.keysize);
+            publicKeyContent = publicKeyContent.replace("-----END RSA PUBLIC KEY-----", "");
+            publicKeyContent = publicKeyContent.replace("-----BEGIN RSA PUBLIC KEY-----", "");
+            publicKeyContent = publicKeyContent.replace("\n", "");
 
-			PrivateKey privatekey = readPrivateKey(privKeyPem);
-			RSAPrivateCrtKey privk = (RSAPrivateCrtKey)privatekey;
+            PrivateKey privatekey = readPrivateKey(privKeyPem);
+            RSAPrivateCrtKey privk = (RSAPrivateCrtKey)privatekey;
 
-			RSAPublicKeySpec publicKeySpec = new java.security.spec.RSAPublicKeySpec
-				(privk.getModulus(), privk.getPublicExponent());
+            RSAPublicKeySpec publicKeySpec = new java.security.spec.RSAPublicKeySpec
+                (privk.getModulus(), privk.getPublicExponent());
 
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			PublicKey myPublicKey = keyFactory.generatePublic(publicKeySpec);
-			JDK_java_security_KeyPair.addkey(this, c);
-			JDK_java_security_KeyPair.addkey(privatekey, c);
-			JDK_java_security_KeyPair.addkey(myPublicKey, c);
-			KeyPair p1 = new KeyPair(myPublicKey, privatekey);
-			return p1;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return null;
-	}
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PublicKey myPublicKey = keyFactory.generatePublic(publicKeySpec);
+            JDK_java_security_KeyPair.addkey(this, c);
+            JDK_java_security_KeyPair.addkey(privatekey, c);
+            JDK_java_security_KeyPair.addkey(myPublicKey, c);
+            KeyPair p1 = new KeyPair(myPublicKey, privatekey);
+            return p1;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 }
