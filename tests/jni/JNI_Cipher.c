@@ -41,10 +41,17 @@ JNIEXPORT char * JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher
     return NULL;
 
 }
-
+ 
+int getNextPowerOfTwo(int value) {
+    value -= 1;
+    for( int shift = 16; shift > 0; shift >>= 1) {
+        value |= value >> shift;
+    }
+    return value + 1;
+}
 
 JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Cipher_1dofinal_1xd(JNIEnv *env, jobject thisObj, int id, jbyteArray b, int mode, int algo) {
-    fprintf(stdout, "-------------------------------------------------------------\n\n\n");
+    // fprintf(stdout, "-------------------------------------------------------------\n\n\n");
     int i;
     unsigned char *res = NULL;
     int keysize = wrapper_rsa_get_key_size(id);
@@ -54,6 +61,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
 
         if (algo == 1) {
             res = wrapper_rsa_encrypt(id, (char *)elements);
+
             char *lala = (char *)malloc(keysize + 1);
             memcpy(lala, res, keysize);
             jbyteArray data = (*env)->NewByteArray(env, keysize);
@@ -69,23 +77,29 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
             (*env)->SetByteArrayRegion(env, data, 0, keysize, bytes);
             return data;
         } else {
-            fprintf(stdout, "AES Encryption\n");
-            fprintf(stdout, "Input text: %s\n", elements);
+            //fprintf(stdout, "AES Encryption\n");
+            // fprintf(stdout, "Input text: %s\n", elements);
             res = wrapper_aes_encrypt(id, (char *)elements, (int)num_bytes);
-            fprintf(stdout, "\nEncrypted text\n\n");
+
+            // fprintf(stdout, "\nEncrypted text\n\n");
             num_bytes = wrapper_aes_getbytes(id);
-            for (i = 0; i < num_bytes; i++) {
-                fprintf(stdout, "%u", res[i]);
-            }
-            fprintf(stdout, "\nEnd of Encrypted text\n\n");
-            jbyteArray data = (*env)->NewByteArray(env, num_bytes);
+            // for (i = 0; i < num_bytes; i++) {
+            //     fprintf(stdout, "%u", res[i]);
+            // }
+
+            // fprintf(stdout, "\nEnd of Encrypted text, size: %d\n\n",num_bytes);
+
+            // char * plainn = (char*)malloc(1000);
+            // plainn = wrapper_aes_decrypt(id, (char *)res, num_bytes);
+            // fprintf(stdout, "\nplain size: %s\n\n",plainn);
+            jbyteArray data = (*env)->NewByteArray(env,num_bytes);
             if (data == NULL) 
-                return NULL; //  out of memory error thrown
+                return NULL; //  out of memory error thrown'
             jbyte *bytes = (*env)->GetByteArrayElements(env, data, 0);
+
             for (i = 0; i < num_bytes; i++)  {
                 bytes[i] = res[i];
             }
-            fprintf(stdout, "\n");
             (*env)->SetByteArrayRegion(env, data, 0, num_bytes, bytes);
             return data;
         }
@@ -94,8 +108,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
         if (algo == 1) {
             res = wrapper_rsa_decrypt(id, (char *)elements);
             keysize = strlen((char *)res);
-            res[keysize-1]='\0';
-            printf("RESS %s\n", res);
+            res[keysize]='\0';
             jbyteArray data = (*env)->NewByteArray(env, keysize);
             if (data == NULL) {
                 return NULL; //  out of memory error thrown
@@ -114,17 +127,22 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
         }else {
 
 
-            fprintf(stdout, "\nEncrypted text\n\n");
+            // fprintf(stdout, "\nEncrypted text\n\n");
             num_bytes = wrapper_aes_getbytes(id);
-            for (i = 0; i < num_bytes; i++) {
-                fprintf(stdout, "%u", elements[i]);
+            // for (i = 0; i < num_bytes; i++) {
+            //     fprintf(stdout, "%u", elements[i]);
 
-            }
-            fprintf(stdout, "\nEnd of Encrypted text\n\n");
-            fprintf(stdout, "\nAES decryption\n");
+            // }
+            // fprintf(stdout, "\nEnd of Encrypted text\n\n");
+            // fprintf(stdout, "\nAES decryption\n");
             res = wrapper_aes_decrypt(id, (char *)elements, num_bytes);
-            fprintf(stdout, "final result decrypt: |%s|\n", res);
+
+            int i;
+            // fprintf(stdout, "final result decrypt: |%s|\n", res);
+
+
             keysize = strlen((char *)res);
+            // fprintf(stdout,"keysize: %d \n",keysize);
             jbyteArray data = (*env)->NewByteArray(env, keysize);
             if (data == NULL) {
                 return NULL; //  out of memory error thrown
@@ -133,10 +151,10 @@ JNIEXPORT jbyteArray JNICALL Java_com_sun_max_vm_jdk_jni_1cipher_1helper_SGX_1Ci
             // creat bytes from byteUrl
             jbyte *bytes = (*env)->GetByteArrayElements(env, data, 0);
             for (i = 0; i < keysize; i++) {
-                fprintf(stdout, "%u", elements[i]);
+                // fprintf(stdout, "%u", elements[i]);
                 bytes[i] = res[i];
             }
-            fprintf(stdout, "\n");
+            //fprintf(stdout, "\n");
             // move from the temp structure to the java structure
             (*env)->SetByteArrayRegion(env, data, 0, keysize, bytes);
             return data;

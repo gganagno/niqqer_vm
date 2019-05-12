@@ -138,7 +138,7 @@ aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, unsigned char
 
     int len;
 
-    printf("ciphertexlen : %d\n",ciphertext_len);
+    // printf("ciphertexlen : %d\n",ciphertext_len);
     EVP_CIPHER_CTX *ctx;
     int plaintext_len;
     
@@ -161,7 +161,7 @@ aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, unsigned char
         abort();
     EVP_DecryptUpdate(ctx, (unsigned char *)plaintext, &len, (unsigned char *)ciphertext, ciphertext_len);
     plaintext_len = len;
-    printf("plaintext_len : %d\n", plaintext_len);
+    // printf("plaintext_len : %d\n", plaintext_len);
     /*
      * Finalise the decryption. Further plaintext bytes may be written at
      * this stage.
@@ -169,7 +169,7 @@ aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, unsigned char
 
     EVP_DecryptFinal_ex(ctx, (unsigned char *)plaintext + len, &len);
     plaintext_len += len;
-    printf("plaintext_len : %d\n", plaintext_len);
+    // printf("plaintext_len : %d\n", plaintext_len);
     /* Clean up */
     EVP_CIPHER_CTX_free(ctx);
     plaintext[plaintext_len]='\0';
@@ -329,7 +329,7 @@ void rsa_decrypt(int id, unsigned char *encrypt, unsigned char *decrypt) {
     char *err = (char *)calloc(1, 130);
     int encrypt_len = key_array[id].kt.rk.enc_len;
     // Decrypt it
-    printf("Encrypt len %d\n", encrypt_len);
+    // printf("Encrypt len %d\n", encrypt_len);
     if(RSA_private_decrypt(encrypt_len, (unsigned char*)encrypt, (unsigned char*)decrypt,
                 key_array[id].kt.rk.keypair, RSA_PKCS1_OAEP_PADDING) == -1) {
         ERR_load_crypto_strings();
@@ -338,7 +338,7 @@ void rsa_decrypt(int id, unsigned char *encrypt, unsigned char *decrypt) {
     }
 
     decrypt[encrypt_len] = '\0';
-    printf("Decrypted message: ->|%s|\n", decrypt);
+    // printf("Decrypted message: ->|%s|\n", decrypt);
     // return decrypt;
 }
 

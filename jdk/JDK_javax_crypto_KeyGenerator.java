@@ -69,9 +69,9 @@ final class JDK_javax_crypto_KeyGenerator {
         jni_keygenerator_helper n = new jni_keygenerator_helper();
         id = n.SGX_KeyGenerator_getid(keysize);
         String java_key = n.SGX_KeyGenerator_generateKey(keysize, id);
-        System.out.println("JAVA KEY --> " + java_key);
+        //System.out.println("JAVA KEY --> " + java_key);
         SecretKeySpec ss = new SecretKeySpec(java_key.getBytes(), "AES");
-        System.out.println("NIQQER_VM generateKey Algorithm = " + p.algo);
+        //System.out.println("NIQQER_VM generateKey Algorithm = " + p.algo);
 
         p.id = id;
         JDK_java_security_KeyPair.myhash.put(ss, p);

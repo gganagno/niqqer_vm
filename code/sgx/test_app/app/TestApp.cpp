@@ -74,7 +74,7 @@ extern "C" {
 				ret = SGX_SUCCESS;
 				memset(buffer, 0, 1024);
 				/* create the enclave */
-				debug_print("Creating Enclave\n");
+				// debug_print("Creating Enclave\n");
 				sprintf(buffer, "%s/com.oracle.max.vm.native/generated/linux/libenclave.signed.so", s);
 				// strcpy(buffer, "./libenclave.signed.so");
 
@@ -152,7 +152,6 @@ extern "C" {
 			// rsa = output = size(kleidiou) wrapper_get_key_size
 			// 
 			rsa_decrypt(eid, id, string, plain);
-            printf("Plain %s\n", (char *)plain);
 			return plain;
 		}
 
@@ -189,7 +188,9 @@ unsigned char *
 	    unsigned char *
 		wrapper_aes_encrypt(int id, unsigned char *string, int len)
 		{
-			unsigned char *encrypted = (unsigned char *)calloc(len, 1);
+			unsigned char *encrypted = (unsigned char *)malloc(len);
+			// memset(encrypted,0,len);
+
 			aes_encrypt(eid, id, string, len, encrypted);
             
 			return encrypted;
@@ -198,9 +199,16 @@ unsigned char *
 		wrapper_aes_decrypt(int id, unsigned char *string, int len)
 		{
             
-			debug_print("Encrypted len b4 decryption: %d\n", len);
-			unsigned char *decrypted = (unsigned char *)calloc(len, 1);
+			// debug_print("Encrypted len decryption: %d\n", len);
+			unsigned char *decrypted = (unsigned char *)malloc(len);
+			memset(decrypted,0,len);
+			// if(decrypted == NULL){
+			// 	debug_print("errrr");
+			// }
+			// debug_print("calloced : %d\n", len);
+
 			aes_decrypt(eid,  id, string, len, decrypted);
+			// debug_print("decrypted: %s\n", decrypted);
 			return decrypted;
 		}
 

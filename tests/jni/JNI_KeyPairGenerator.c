@@ -23,7 +23,6 @@ JNIEXPORT int JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairGener
 	id = 0;
 	buff = NULL;
 	res = NULL;
-    printf("EDWWWWWWWWWWWWWWWW!\n");
 	wrapper_init_enclave();
 	id = wrapper_rsa_keygen(size);
 	return id;
@@ -37,7 +36,7 @@ JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairG
 	char *buff;
 	buff = NULL;
 	buff = wrapper_rsa_get_pubkey(id);
-	printf("NIQQER_JNI: Public key = \n%s\n", buff);
+	// printf("NIQQER_JNI: Public key = \n%s\n", buff);
 	jstring result = (*env)->NewStringUTF(env, buff);
 	return result;
 }
@@ -46,7 +45,7 @@ JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1rsa_1helper_SGX_1KeyPairG
 	char *buff;
 	buff = NULL;
 	buff = wrapper_rsa_get_privkey(id);
-	printf("NIQQER_JNI: Private key = \n%s\n", buff);
+	// printf("NIQQER_JNI: Private key = \n%s\n", buff);
 	jstring result = (*env)->NewStringUTF(env, buff);
 	return result;
 }

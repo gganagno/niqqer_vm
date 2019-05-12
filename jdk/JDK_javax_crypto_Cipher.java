@@ -20,7 +20,7 @@ final class JDK_javax_crypto_Cipher {
 
 		jni_cipher_helper n = new jni_cipher_helper();
 		custom_info p = JDK_java_security_KeyPair.myhash.get(key);
-		System.out.println("Changing opmode " + opmode);
+		// System.out.println("Changing opmode " + opmode);
 		p.type = opmode;
 		if (key.getAlgorithm().equals("AES"))
 			p.algo = 0;
@@ -35,13 +35,12 @@ final class JDK_javax_crypto_Cipher {
 		int id = 0; 
 		custom_info c = new custom_info();
 		System.loadLibrary("hello");              
-		System.out.println("MXVM in dofinal about to dofinalxd");
 		c = JDK_java_security_KeyPair.myhash.get((Object)this);
 		id = c.id;
 
 		jni_cipher_helper n = new jni_cipher_helper();                           
-		byte[] n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);	
-		System.out.println("@@" +  n1.toString());
+		byte[] n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);
+		// System.out.println("@@@ " +  n1.toString());
 		return n1;
 	}                                                                           
 

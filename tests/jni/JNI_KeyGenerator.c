@@ -29,7 +29,7 @@ JNIEXPORT jstring JNICALL Java_com_sun_max_vm_jdk_jni_1keygenerator_1helper_SGX_
 	char *res;
 
 	size /= 8;
-	printf("ID = %d\n", id);
+	// printf("ID = %d\n", id);
 	//wrapper_print_key(id);
 	res = wrapper_get_key(id, size);
 	buff = malloc(size);
