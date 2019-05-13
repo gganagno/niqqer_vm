@@ -40,7 +40,7 @@ final class JDK_javax_crypto_Cipher {
 
 		jni_cipher_helper n = new jni_cipher_helper();                           
 		byte[] n1 = n.SGX_Cipher_dofinal_xd(id, b, c.type, c.algo);
-		// System.out.println("@@@ " +  n1.toString());
+		System.out.println("@@@ " +  n1.toString());
 		return n1;
 	}                                                                           
 

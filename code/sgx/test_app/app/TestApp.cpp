@@ -7,7 +7,8 @@
 #include <libgen.h>
 #include <stdlib.h>
 #include <pthread.h>
-
+#include <iostream>
+using namespace std;
 # define MAX_PATH FILENAME_MAX
 
 
@@ -76,7 +77,7 @@ extern "C" {
 				/* create the enclave */
 				// debug_print("Creating Enclave\n");
 				sprintf(buffer, "%s/com.oracle.max.vm.native/generated/linux/libenclave.signed.so", s);
-				// strcpy(buffer, "./libenclave.signed.so");
+				//strcpy(buffer, "./libenclave.signed.so");
 
 				ret = sgx_create_enclave(buffer, SGX_DEBUG_FLAG, &token,
 						&updated, &eid, NULL);
@@ -148,7 +149,7 @@ extern "C" {
 	unsigned char *
 		wrapper_rsa_decrypt(int id, unsigned char *string)
 		{
-			unsigned char *plain = (unsigned char *)calloc(wrapper_rsa_get_key_size(id), 1);
+			unsigned char *plain = (unsigned char *)malloc(wrapper_rsa_get_key_size(id)*16);
 			// rsa = output = size(kleidiou) wrapper_get_key_size
 			// 
 			rsa_decrypt(eid, id, string, plain);
@@ -161,7 +162,7 @@ extern "C" {
 		wrapper_rsa_encrypt(int id, unsigned char *string)
 		{
 
-			unsigned char *encrypted = (unsigned char *)calloc(wrapper_rsa_get_key_size(id), 1);
+			unsigned char *encrypted = (unsigned char *)malloc(wrapper_rsa_get_key_size(id)*16);
 			rsa_encrypt(eid, id, string, encrypted);
 			return encrypted;
 		}
@@ -188,8 +189,8 @@ unsigned char *
 	    unsigned char *
 		wrapper_aes_encrypt(int id, unsigned char *string, int len)
 		{
-			unsigned char *encrypted = (unsigned char *)malloc(len);
-			// memset(encrypted,0,len);
+			unsigned char *encrypted = (unsigned char *)malloc(len*16);
+			memset(encrypted,0,len);
 
 			aes_encrypt(eid, id, string, len, encrypted);
             
@@ -199,16 +200,10 @@ unsigned char *
 		wrapper_aes_decrypt(int id, unsigned char *string, int len)
 		{
             
-			// debug_print("Encrypted len decryption: %d\n", len);
-			unsigned char *decrypted = (unsigned char *)malloc(len);
-			memset(decrypted,0,len);
-			// if(decrypted == NULL){
-			// 	debug_print("errrr");
-			// }
-			// debug_print("calloced : %d\n", len);
-
+			debug_print("Encrypted len decryption: %d\n", len);
+			unsigned char *decrypted = (unsigned char *)malloc(len*16);
+            memset(decrypted, 0, len);
 			aes_decrypt(eid,  id, string, len, decrypted);
-			// debug_print("decrypted: %s\n", decrypted);
 			return decrypted;
 		}
 
@@ -216,12 +211,16 @@ unsigned char *
 
 	/* debugging */
 	int main() {
-		//int id;
-		//wrapper_init_enclave();
-		//id = wrapper_keygen(16);
-		//unsigned char *xd;
-		//xd = wrapper_aes_encrypt( id, "xd",strlen("xd"));
-		//printf("\n|%s|\n", (char *)wrapper_aes_decrypt(id, xd, wrapper_aes_getbytes(id)));
+		int id;
+        int res;
+        unsigned char x[2048];
+        memset(x, 1, 2048);
+        unsigned char *xd;
+		wrapper_init_enclave();
+		id = wrapper_keygen(16);
+		xd = wrapper_aes_encrypt( id, x, 2048);
+        printf("Encrypted bytes = %d\n", res = wrapper_aes_getbytes(id));
+	    wrapper_aes_decrypt(id, (unsigned char *)xd, res);
 	}
 	typedef struct _sgx_errlist_t {
 		sgx_status_t err;

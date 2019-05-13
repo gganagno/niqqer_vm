@@ -130,7 +130,6 @@ aes_encrypt(int id, unsigned char *plaintext, int plaintext_len, unsigned char *
 void
 aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, unsigned char *plaintext) 
 {
-
     ciphertext_len = key_array[id].kt.key.enc_len;
     
     unsigned char *key = key_array[id].kt.key.key;
@@ -151,14 +150,14 @@ aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, unsigned char
      * IV size for *most* modes is the same as the block size. For AES this
      * is 128 bits
      */
+
     EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv);
 
     /*
      * Provide the message to be decrypted, and obtain the plaintext output.
      * EVP_DecryptUpdate can be called multiple times if necessary.
      */
-    if (ciphertext == NULL || plaintext == NULL)
-        abort();
+
     EVP_DecryptUpdate(ctx, (unsigned char *)plaintext, &len, (unsigned char *)ciphertext, ciphertext_len);
     plaintext_len = len;
     // printf("plaintext_len : %d\n", plaintext_len);
@@ -166,7 +165,6 @@ aes_decrypt(int id, unsigned char *ciphertext, int ciphertext_len, unsigned char
      * Finalise the decryption. Further plaintext bytes may be written at
      * this stage.
      */
-
     EVP_DecryptFinal_ex(ctx, (unsigned char *)plaintext + len, &len);
     plaintext_len += len;
     // printf("plaintext_len : %d\n", plaintext_len);

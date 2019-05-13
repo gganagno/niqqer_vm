@@ -4,7 +4,7 @@ cp JDK_javax* $MAXINE_HOME/com.sun.max/src/com/sun/max/vm/jdk
 cp JDK_java_s* $MAXINE_HOME/com.sun.max/src/com/sun/max/vm/jdk
 cd ../code/sgx/test_app
 make clean
-make
+make SGX_MODE=HW
 cp *.so $MAXINE_HOME/com.oracle.max.vm.native/generated/linux/
 
 echo $PWD
